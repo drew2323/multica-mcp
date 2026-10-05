@@ -93,11 +93,17 @@ func TestEndpointCatalogCoverageAndInputDocumentation(t *testing.T) {
 	}
 	// Catalog runtime entries must be fully categorized, and only included
 	// safe user-facing JSON endpoints may register as tools.
-	var catalog struct { Endpoints []Endpoint `json:"endpoints"` }
-	if err := json.Unmarshal(catalogJSON, &catalog); err != nil { t.Fatal(err) }
+	var catalog struct {
+		Endpoints []Endpoint `json:"endpoints"`
+	}
+	if err := json.Unmarshal(catalogJSON, &catalog); err != nil {
+		t.Fatal(err)
+	}
 	included := 0
 	for _, e := range catalog.Endpoints {
-		if e.Scope == "include" { included++ } else if strings.TrimSpace(e.Reason) == "" {
+		if e.Scope == "include" {
+			included++
+		} else if strings.TrimSpace(e.Reason) == "" {
 			t.Errorf("excluded route has no reason: %s %s", e.Method, e.Path)
 		}
 	}

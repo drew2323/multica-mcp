@@ -2,9 +2,9 @@
 
 A thin REST-only MCP server maintained in [drew2323/multica-mcp](https://github.com/drew2323/multica-mcp), derived from [strider2038/multica-mcp](https://github.com/strider2038/multica-mcp). Original license and attribution retained. The Go module path still uses the upstream namespace; this is not an upstream release.
 
-## Branch and release status
+## Project status
 
-Use **`rest-api-wrapper`**, tracked by [PR #1](https://github.com/drew2323/multica-mcp/pull/1). `main` still contains the earlier custom-status bridge. Do not install upstream releases or upstream `go install ...@latest` for this implementation. The PR remains draft: exhaustive endpoint schemas and live coverage are incomplete, although the branch is deployed in our private integration. No fork release binary is claimed.
+The default `main` branch contains this REST-only implementation, used in our private ChatGPT integration. This is an independently maintained fork, not an upstream release. Exhaustive endpoint schemas and live coverage remain incomplete; limitations are documented below. Build from this repository: upstream releases and upstream `go install ...@latest` do not provide these capabilities. No new fork release binary is claimed.
 
 ## Behavior
 
@@ -17,12 +17,41 @@ Use **`rest-api-wrapper`**, tracked by [PR #1](https://github.com/drew2323/multi
 
 See [endpoint catalog](docs/rest-api-catalog.json), [coverage limitations](docs/rest-api-coverage.md), [attachment content tools](docs/attachment-content-tools.md) and [domains/profiles](docs/tool-domains.md). Some input descriptions remain incomplete; raw JSON passthrough is not a complete schema.
 
+## What it provides today
+
+- **Workspaces:** list/detail/member discovery; no implicit workspace administration in core.
+- **Projects:** search, list, detail and CRUD; project resources in specialized profiles.
+- **Issues:** search/list/detail/create/update/delete, assignment and arbitrary custom statuses through native update fields, hierarchy/children and general issue timeline.
+- **Comments:** threaded create/read/update/delete and resolve operations.
+- **Labels:** read available definitions and issue labels; add/remove issue labels in core. Definition mutations are not in core.
+- **Properties:** read typed definitions and issue values, set/clear issue values and metadata. Definition mutations are not in core.
+- **Followers:** list subscribers in core. Subscribe/unsubscribe are specialized because native REST also permits targeting other users.
+- **Attachments:** list/detail, read text-previewable content, upload files to issues/comments. Markdown supplementary requirements can be read and written directly. No attachment deletion in core, no image interpretation or PDF text extraction.
+- **Specialized profiles:** agent/execution history, autopilots, integrations, runtimes, plugins, notifications, views and configuration endpoints. Presence in the catalog is not a claim of exhaustive live validation.
+
+### Attachment tools
+
+- `multica_attachment_read_content`: authenticated server text-preview endpoint, maximum 2 MiB; returns `content`, `encoding`, `content_type`, `size_bytes`.
+- `multica_attachment_upload`: multipart upload, maximum 8 MiB locally; supply `filename`, exactly one of `content` / `content_base64`, and an issue/comment target. `.md` defaults to `text/markdown`. No host filesystem reads.
+
+Example upload arguments:
+
+```json
+{"filename":"requirements.md","content":"# Additional requirements\nKeep custom statuses intact.\n","issue_id":"<issue-id>"}
+```
+
+Use the attachment ID in the upload response for `multica_attachment_read_content`:
+
+```json
+{"attachment_id":"<attachment-id>"}
+```
+
 ## Build
 
 Go 1.25+:
 
 ```bash
-git clone --branch rest-api-wrapper https://github.com/drew2323/multica-mcp.git
+git clone https://github.com/drew2323/multica-mcp.git
 cd multica-mcp
 go test -race ./...
 go build -o bin/multica-mcp .
@@ -70,9 +99,11 @@ Verified:
 - Disposable unassigned issue create/read and `ingested → todo → ingested` transitions.
 - Children/comments/subscribers/task-run reads; threaded comment create/update/delete.
 - Cleanup independently confirmed by HTTP 404.
-- Installed binary matches candidate; historical deployed launcher tools/list 28 and custom status discovery passed. Service active/enabled; tunnel readiness healthy.
+- Installed binary matches candidate; deployed launcher tools/list 45 and custom status discovery passed. Service active/enabled; tunnel readiness healthy.
 
-Not verified: every endpoint live, agent assignment/autopilot trigger (avoided starting work), reboot via actual reboot, post-upgrade end-to-end ChatGPT call. Tool names changed: refresh is required. Legacy source files remain but workflow tools are not registered.
+Maintainer confirmed the refreshed ChatGPT connection works after deployment. Live Markdown upload/read was separately verified through the deployed MCP launcher with exact Czech text agreement, followed by attachment and issue cleanup (404).
+
+Not verified: every endpoint live, agent assignment/autopilot trigger (avoided starting work), reboot via actual reboot. Tool names changed: refresh is required. Legacy source files remain but workflow tools are not registered.
 
 ## License
 
