@@ -85,7 +85,7 @@
       "registration": "r.Get(\"/api/attachments/{id}/signed-download\", h.DownloadAttachmentWithCapability)",
       "implementation_scope": "exclude",
       "scope_reason": "Credential, secret, token, signing, or webhook delivery/control surface is excluded from general REST tools.",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/attachment_capability.go:198): dl, exp, sig. Delegated helpers may accept additional keys.",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "DownloadAttachmentWithCapability"
@@ -108,7 +108,7 @@
       "line": 1497,
       "registration": "r.Get(\"/plugin-surfaces/{token}\", h.ServePluginSurface)",
       "implementation_scope": "exclude",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/plugin_surface.go:220): Authorization, Cookie. Delegated helpers may accept additional keys.",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ServePluginSurface",
@@ -133,7 +133,7 @@
       "registration": "r.Get(\"/api/config\", h.GetConfig)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/config.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/config.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/config.go:109): agent_conversation_starters_supported, allow_signup, analytics_environment, cdn_domain, cdn_signed, comment_delete_keep_replies_supported, daemon_app_url, daemon_server_url, feature_flags, google_client_id, issue_create_properties_supported, local_worktree_supported, posthog_host, posthog_key, server_version, vcs_integration_available, workspace_creation_disabled. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetConfig"
     },
@@ -144,7 +144,7 @@
       "registration": "r.Get(\"/api/share-links/{code}\", h.GetShareLinkInfo)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/share_link.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/share_link.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/share_link.go:240): creator_name, role, workspace_name, workspace_slug. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetShareLinkInfo"
     },
@@ -167,7 +167,7 @@
       "registration": "r.Post(\"/api/webhooks/github\", h.HandleGitHubWebhook)",
       "implementation_scope": "exclude",
       "scope_reason": "Credential, secret, token, signing, or webhook delivery/control surface is excluded from general REST tools.",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/github.go:1077): X-GitHub-Event, X-Hub-Signature-256. Delegated helpers may accept additional keys.",
       "request_body": "Inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "HandleGitHubWebhook"
@@ -179,7 +179,7 @@
       "registration": "r.Get(\"/api/github/setup\", h.GitHubSetupCallback)",
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/github.go:504): installation_id, state. Delegated helpers may accept additional keys.",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GitHubSetupCallback"
@@ -215,7 +215,7 @@
       "registration": "r.Get(\"/api/integrations/composio/callback\", h.ComposioCallback)",
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/integrations_composio.go:112): connected_account_id, state, status. Delegated helpers may accept additional keys.",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ComposioCallback"
@@ -227,7 +227,7 @@
       "registration": "r.Post(\"/register\", h.DaemonRegister)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/daemon.go:405): cli_version, daemon_id, device_name, failed_profiles, launched_by, legacy_daemon_ids, runtimes, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "DaemonRegister",
       "scope_reason": "Daemon runtime transport/callback surface is internal and not user-facing REST data."
@@ -251,7 +251,7 @@
       "registration": "r.Post(\"/heartbeat\", h.DaemonHeartbeat)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/daemon.go:1089): runtime_id, supports_batch_import. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "DaemonHeartbeat",
       "scope_reason": "Daemon runtime transport/callback surface is internal and not user-facing REST data."
@@ -274,7 +274,7 @@
       "line": 1562,
       "registration": "r.Get(\"/workspaces\", h.ListDaemonWorkspaces)",
       "implementation_scope": "exclude",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/daemon_workspace.go:27): If-None-Match. Delegated helpers may accept additional keys.",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListDaemonWorkspaces",
@@ -311,7 +311,7 @@
       "registration": "r.Post(\"/tasks/{id}/plugin-hooks\", h.InvokeAgentPluginHook)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/plugin_agent_hook.go:29): hook_key, input, installation_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "InvokeAgentPluginHook",
       "scope_reason": "Daemon runtime transport/callback surface is internal and not user-facing REST data."
@@ -383,7 +383,7 @@
       "registration": "r.Post(\"/runtimes/{runtimeId}/tasks/{taskId}/skill-bundles/resolve\", h.ResolveTaskSkillBundles)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/daemon.go:3915): skills. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ResolveTaskSkillBundles",
       "scope_reason": "Daemon runtime transport/callback surface is internal and not user-facing REST data."
@@ -491,7 +491,7 @@
       "registration": "r.Post(\"/tasks/{taskId}/supplements/{commentId}/ack\", h.AckTaskSupplement)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/task_supplement.go:402): delivered, error. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "AckTaskSupplement",
       "scope_reason": "Daemon runtime transport/callback surface is internal and not user-facing REST data."
@@ -503,7 +503,7 @@
       "registration": "r.Post(\"/tasks/{taskId}/wait-local-directory\", h.MarkTaskWaitingLocalDirectory)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/daemon.go:4164): reason. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "MarkTaskWaitingLocalDirectory",
       "scope_reason": "Daemon runtime transport/callback surface is internal and not user-facing REST data."
@@ -515,7 +515,7 @@
       "registration": "r.Post(\"/tasks/{taskId}/progress\", h.ReportTaskProgress)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/daemon.go:4197): step, summary, total. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ReportTaskProgress",
       "scope_reason": "Daemon runtime transport/callback surface is internal and not user-facing REST data."
@@ -527,7 +527,7 @@
       "registration": "r.Post(\"/tasks/{taskId}/complete\", h.CompleteTask)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/daemon.go:4274): branch_name, durable_work_dir, error, failure_reason, output, pr_url, retired_session_id, session_id, session_rollout_missing, work_dir. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CompleteTask",
       "scope_reason": "Daemon runtime transport/callback surface is internal and not user-facing REST data."
@@ -539,7 +539,7 @@
       "registration": "r.Post(\"/tasks/{taskId}/fail\", h.FailTask)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/daemon.go:5006): branch_name, durable_work_dir, error, failure_reason, retired_session_id, session_id, session_rollout_missing, work_dir. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "FailTask",
       "scope_reason": "Daemon runtime transport/callback surface is internal and not user-facing REST data."
@@ -563,7 +563,7 @@
       "registration": "r.Post(\"/tasks/{taskId}/messages\", h.ReportTaskMessages)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/daemon.go:5097): messages. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ReportTaskMessages",
       "scope_reason": "Daemon runtime transport/callback surface is internal and not user-facing REST data."
@@ -574,7 +574,7 @@
       "line": 1598,
       "registration": "r.Get(\"/tasks/{taskId}/messages\", h.ListTaskMessages)",
       "implementation_scope": "exclude",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/daemon.go:5412): since. Delegated helpers may accept additional keys.",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListTaskMessages",
@@ -587,7 +587,7 @@
       "registration": "r.Post(\"/tasks/{taskId}/cancel-ack\", h.AckTaskCancelled)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/daemon.go:5263): branch_name, durable_work_dir, error_message, failure_reason. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "AckTaskCancelled",
       "scope_reason": "Daemon runtime transport/callback surface is internal and not user-facing REST data."
@@ -599,7 +599,7 @@
       "registration": "r.Post(\"/workspaces/{workspaceId}/issues/gc-check\", h.BatchIssueGCCheck)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/daemon.go:5936): category, found, id, issue_ids, status, updated_at. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "BatchIssueGCCheck",
       "scope_reason": "Daemon runtime transport/callback surface is internal and not user-facing REST data."
@@ -672,7 +672,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Daemon runtime transport/callback surface is internal and not user-facing REST data.",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/task_lifecycle.go:70): session_id, work_dir. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "PinTaskSession"
     },
@@ -683,7 +683,7 @@
       "registration": "r.Post(\"/hooks/{key}\", h.InvokePluginHook)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/plugin_hook.go:32): input, issue_id, trigger. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "InvokePluginHook",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools"
@@ -706,7 +706,7 @@
       "registration": "r.Patch(\"/api/me\", h.UpdateMe)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/auth.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/auth.go:781): avatar_url, language, name, profile_description, timezone. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateMe"
     },
@@ -717,7 +717,7 @@
       "registration": "r.Patch(\"/api/me/onboarding\", h.PatchOnboarding)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/onboarding.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/onboarding.go:226): questionnaire. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "PatchOnboarding"
     },
@@ -728,7 +728,7 @@
       "registration": "r.Post(\"/api/me/onboarding/complete\", h.CompleteOnboarding)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/onboarding.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/onboarding.go:69): completion_path, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CompleteOnboarding"
     },
@@ -739,7 +739,7 @@
       "registration": "r.Post(\"/api/me/onboarding/cloud-waitlist\", h.JoinCloudWaitlist)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/onboarding.go:321): email, reason. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "JoinCloudWaitlist"
     },
@@ -750,7 +750,7 @@
       "registration": "r.Post(\"/api/me/onboarding/runtime-bootstrap\", h.BootstrapOnboardingRuntime)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/onboarding_shim.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/onboarding_shim.go:134): agent_id, issue_id, runtime_id, starter_prompt, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "BootstrapOnboardingRuntime"
     },
@@ -761,7 +761,7 @@
       "registration": "r.Post(\"/api/me/onboarding/no-runtime-bootstrap\", h.BootstrapOnboardingNoRuntime)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/onboarding_shim.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/onboarding_shim.go:367): issue_id, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "BootstrapOnboardingNoRuntime"
     },
@@ -785,7 +785,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/session.go:50): check_again_in_seconds, expires_at, renewed, token. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RefreshSession"
     },
@@ -796,7 +796,7 @@
       "registration": "r.Post(\"/api/upload-file\", h.UploadFile)",
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/file.go:379): X-Actor-Source, X-Task-ID. Delegated helpers may accept additional keys.",
       "request_body": "Inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UploadFile"
@@ -808,7 +808,7 @@
       "registration": "r.Post(\"/api/feedback\", h.CreateFeedback)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/feedback.go:66): context, created_at, id, kind, message, url, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateFeedback"
     },
@@ -842,7 +842,7 @@
       "registration": "r.Post(\"/\", h.CreateWorkspace)",
       "implementation_scope": "include",
       "query_fields": "No query parameters.",
-      "request_body": "JSON workspace fields: name (required), slug (optional), description; handler defaults/validation apply.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/workspace.go:202): context, description, issue_prefix, name, slug. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateWorkspace",
       "description": "POST /api/workspaces. CreateWorkspace: No query parameters. JSON workspace fields: name (required), slug (optional), description; handler defaults/validation apply."
@@ -866,7 +866,7 @@
       "registration": "r.Get(\"/members\", h.ListMembersWithUser)",
       "implementation_scope": "include",
       "query_fields": "Path id is the workspace UUID.",
-      "request_body": "No body.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/workspace.go:544): avatar_url, created_at, email, id, name, role, user_id, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListMembersWithUser",
       "description": "GET /api/workspaces/{id}/members. ListMembersWithUser: Path id is the workspace UUID. No body."
@@ -889,7 +889,7 @@
       "registration": "r.Get(\"/invitations\", h.ListWorkspaceInvitations)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/invitation.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/invitation.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/invitation.go:256): created_at, expires_at, id, invitee_email, invitee_user_id, inviter_email, inviter_id, inviter_name, role, status, updated_at, workspace_id, workspace_name. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListWorkspaceInvitations"
     },
@@ -966,7 +966,7 @@
       "registration": "r.Get(\"/plugins/{installationId}/surfaces/{surfaceKey}/launch\", h.GetPluginSurfaceLaunch)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/plugin_surface.go:152): bridge_token, challenge, digest, expires_at, installation_id, surface_key, url, version, version_id, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetPluginSurfaceLaunch",
       "scope_reason": "Plugin launch/tool proxy is an internal transport surface, not a raw JSON user-facing resource."
@@ -978,7 +978,7 @@
       "registration": "r.Put(\"/\", h.UpdateWorkspace)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/workspace.go:377): avatar_url, context, description, issue_prefix, name, repos, settings. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateWorkspace"
     },
@@ -989,7 +989,7 @@
       "registration": "r.Patch(\"/\", h.UpdateWorkspace)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/workspace.go:377): avatar_url, context, description, issue_prefix, name, repos, settings. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateWorkspace"
     },
@@ -1000,7 +1000,7 @@
       "registration": "r.Post(\"/members\", h.CreateInvitation)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/invitation.go:61): email, role. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateInvitation"
     },
@@ -1011,7 +1011,7 @@
       "registration": "r.Patch(\"/\", h.UpdateMember)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/workspace.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/workspace.go:610): role. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateMember"
     },
@@ -1044,7 +1044,7 @@
       "registration": "r.Post(\"/mcp-servers\", h.CreateWorkspaceMcpServer)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/workspace_mcp_api.go:153): config, name. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateWorkspaceMcpServer"
     },
@@ -1055,7 +1055,7 @@
       "registration": "r.Put(\"/mcp-servers/{serverId}\", h.UpdateWorkspaceMcpServer)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/workspace_mcp_api.go:222): config, name. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateWorkspaceMcpServer"
     },
@@ -1077,7 +1077,7 @@
       "registration": "r.Post(\"/share-links\", h.CreateShareLink)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/share_link.go:68): expires_in, max_uses, role. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateShareLink"
     },
@@ -1110,7 +1110,7 @@
       "registration": "r.Post(\"/runtime-profiles\", h.CreateRuntimeProfile)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/runtime_profile.go:132): command_name, description, display_name, enabled, fixed_args, protocol_family, runtime_type. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateRuntimeProfile"
     },
@@ -1121,7 +1121,7 @@
       "registration": "r.Patch(\"/runtime-profiles/{profileId}\", h.UpdateRuntimeProfile)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/runtime_profile.go:280): command_name, description, display_name, enabled, fixed_args, protocol_family, runtime_type. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateRuntimeProfile"
     },
@@ -1132,7 +1132,7 @@
       "registration": "r.Put(\"/runtime-profiles/{profileId}\", h.UpdateRuntimeProfile)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/runtime_profile.go:280): command_name, description, display_name, enabled, fixed_args, protocol_family, runtime_type. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateRuntimeProfile"
     },
@@ -1176,7 +1176,7 @@
       "registration": "r.Post(\"/plugins/packages/local\", h.PublishLocalPluginPackage)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/plugin_package.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/plugin_package.go:111): name. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "PublishLocalPluginPackage"
     },
@@ -1198,7 +1198,7 @@
       "registration": "r.Post(\"/plugins/preview\", h.PreviewPlugin)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/plugin.go:214): version_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "PreviewPlugin"
     },
@@ -1209,7 +1209,7 @@
       "registration": "r.Post(\"/plugins\", h.InstallPlugin)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/plugin.go:241): granted_scopes, version_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "InstallPlugin"
     },
@@ -1220,7 +1220,7 @@
       "registration": "r.Get(\"/plugins/{installationId}/invocations\", h.ListPluginInvocations)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/plugin_hook.go:125): attempt, created_at, delivery_id, error, event_type, hook_key, id, latency_ms, planned_at, status, trigger. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListPluginInvocations"
     },
@@ -1232,7 +1232,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential, secret, token, signing, or webhook delivery/control surface is excluded from general REST tools.",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/plugin_hook.go:181): signing_secret, token. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RotatePluginToken"
     },
@@ -1255,7 +1255,7 @@
       "registration": "r.Get(\"/plugins/{installationId}/mcp/{hookKey}/tools\", h.ListPluginMCPTools)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/plugin_mcp.go:32): approved, description, drifted, name, schema_digest. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListPluginMCPTools",
       "scope_reason": "Plugin launch/tool proxy is an internal transport surface, not a raw JSON user-facing resource."
@@ -1267,7 +1267,7 @@
       "registration": "r.Put(\"/plugins/{installationId}/mcp/{hookKey}/tools\", h.ApprovePluginMCPTools)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/plugin_mcp.go:68): tools. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ApprovePluginMCPTools",
       "scope_reason": "Plugin launch/tool proxy is an internal transport surface, not a raw JSON user-facing resource."
@@ -1279,7 +1279,7 @@
       "registration": "r.Put(\"/plugins/{installationId}/config\", h.ConfigurePlugin)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/plugin.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/plugin.go:277): values. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ConfigurePlugin"
     },
@@ -1322,8 +1322,8 @@
       "line": 1794,
       "registration": "r.Get(\"/github/connect\", h.GitHubConnect)",
       "implementation_scope": "exclude",
-      "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/github.go:465): return_to. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/github.go:465): configured, url. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GitHubConnect",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools"
@@ -1359,7 +1359,7 @@
       "registration": "r.Post(\"/vcs/connections\", h.ConnectVCS)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/vcs.go:160): access_token, account_login, created_at, id, instance_url, provider, webhook_path, webhook_secret, webhook_url, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ConnectVCS",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools"
@@ -1372,7 +1372,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential, secret, token, signing, or webhook delivery/control surface is excluded from general REST tools.",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/vcs.go:304): account_login, created_at, id, instance_url, provider, webhook_path, webhook_secret, webhook_url, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RotateVCSConnectionWebhook"
     },
@@ -1418,8 +1418,8 @@
       "line": 1827,
       "registration": "r.Post(\"/lark/install/begin\", h.BeginLarkInstall)",
       "implementation_scope": "exclude",
-      "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/lark.go:278): agent_id, region. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/lark.go:278): expires_in_seconds, poll_interval_seconds, qr_code_url, session_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "BeginLarkInstall",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools"
@@ -1431,7 +1431,7 @@
       "registration": "r.Get(\"/lark/install/{sessionId}/status\", h.GetLarkInstallStatus)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/lark.go:386): error_message, error_reason, installation_id, status. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetLarkInstallStatus",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools"
@@ -1478,8 +1478,8 @@
       "line": 1844,
       "registration": "r.Post(\"/slack/install/byo\", h.RegisterSlackBYO)",
       "implementation_scope": "exclude",
-      "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/slack.go:98): agent_id. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/slack.go:98): app_token, bot_token. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RegisterSlackBYO",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools"
@@ -1502,8 +1502,8 @@
       "line": 1846,
       "registration": "r.Post(\"/wecom/install/byo\", h.RegisterWecomBYO)",
       "implementation_scope": "exclude",
-      "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/wecom_web.go:127): agent_id. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/wecom_web.go:127): bot_id, bot_name, secret. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RegisterWecomBYO",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools"
@@ -1527,7 +1527,7 @@
       "registration": "r.Get(\"/dingtalk/groups\", h.ListDingTalkGroups)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/dingtalk.go:213): bot_identities, group_discovery_supported, groups, inactive_group_counts, next_offset. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListDingTalkGroups",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools"
@@ -1562,8 +1562,8 @@
       "line": 1855,
       "registration": "r.Post(\"/dingtalk/install/byo\", h.RegisterDingTalkBYO)",
       "implementation_scope": "exclude",
-      "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/dingtalk.go:571): agent_id. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/dingtalk.go:571): client_id, client_secret. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RegisterDingTalkBYO",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools"
@@ -1598,8 +1598,8 @@
       "line": 1867,
       "registration": "r.Post(\"/telegram/install\", h.RegisterTelegramBot)",
       "implementation_scope": "exclude",
-      "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/telegram.go:91): agent_id. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/telegram.go:91): bot_token. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RegisterTelegramBot",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools"
@@ -1611,7 +1611,7 @@
       "registration": "r.Post(\"/api/lark/binding/redeem\", h.RedeemLarkBindingToken)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/lark.go:210): installation_id, lark_open_id, token, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RedeemLarkBindingToken",
       "scope_reason": "Credential, secret, token, signing, or webhook delivery/control surface is excluded from general REST tools."
@@ -1623,7 +1623,7 @@
       "registration": "r.Post(\"/api/slack/binding/redeem\", h.RedeemSlackBindingToken)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/slack.go:240): installation_id, slack_user_id, token, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RedeemSlackBindingToken",
       "scope_reason": "Credential, secret, token, signing, or webhook delivery/control surface is excluded from general REST tools."
@@ -1635,7 +1635,7 @@
       "registration": "r.Post(\"/api/dingtalk/binding/redeem\", h.RedeemDingTalkBindingToken)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/dingtalk.go:737): dingtalk_user_id, installation_id, token, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RedeemDingTalkBindingToken",
       "scope_reason": "Credential, secret, token, signing, or webhook delivery/control surface is excluded from general REST tools."
@@ -1647,7 +1647,7 @@
       "registration": "r.Post(\"/api/wecom/binding/redeem\", h.RedeemWecomBindingToken)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/wecom_web.go:359): installation_id, token, wecom_user_id, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RedeemWecomBindingToken",
       "scope_reason": "Credential, secret, token, signing, or webhook delivery/control surface is excluded from general REST tools."
@@ -1659,7 +1659,7 @@
       "registration": "r.Post(\"/api/telegram/binding/redeem\", h.RedeemTelegramBindingToken)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/telegram.go:224): installation_id, telegram_user_id, token, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RedeemTelegramBindingToken",
       "scope_reason": "Credential, secret, token, signing, or webhook delivery/control surface is excluded from general REST tools."
@@ -1671,7 +1671,7 @@
       "registration": "r.Post(\"/connect/init\", h.ComposioConnectInit)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/integrations_composio.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/integrations_composio.go:67): redirect_url, toolkit_slug. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ComposioConnectInit"
     },
@@ -1682,7 +1682,7 @@
       "registration": "r.Get(\"/toolkits\", h.ListComposioToolkits)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/integrations_composio.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/integrations_composio.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/integrations_composio.go:174): category, connectable, logo, name, slug. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListComposioToolkits"
     },
@@ -1693,7 +1693,7 @@
       "registration": "r.Get(\"/connections\", h.ListComposioConnections)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/integrations_composio.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/integrations_composio.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/integrations_composio.go:135): connected_at, id, last_used_at, status, toolkit_slug. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListComposioConnections"
     },
@@ -1715,7 +1715,7 @@
       "registration": "r.Get(\"/api/invitations\", h.ListMyInvitations)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/invitation.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/invitation.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/invitation.go:407): created_at, expires_at, id, invitee_email, invitee_user_id, inviter_email, inviter_id, inviter_name, role, status, updated_at, workspace_id, workspace_name. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListMyInvitations"
     },
@@ -1759,7 +1759,7 @@
       "registration": "r.Post(\"/api/share-links/join\", h.JoinByShareLink)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/share_link.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/share_link.go:264): code. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "JoinByShareLink"
     },
@@ -1783,7 +1783,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential, secret, token, signing, or webhook delivery/control surface is excluded from general REST tools.",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/personal_access_token.go:60): created_at, expires_at, expires_in_days, id, last_used_at, name, token, token_prefix. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreatePersonalAccessToken"
     },
@@ -1794,8 +1794,8 @@
       "registration": "r.Post(\"/current/renew\", h.RenewCurrentPersonalAccessToken)",
       "implementation_scope": "exclude",
       "scope_reason": "Credential, secret, token, signing, or webhook delivery/control surface is excluded from general REST tools.",
-      "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/personal_access_token.go:159): Authorization. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/personal_access_token.go:159): expires_at, renewed. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RenewCurrentPersonalAccessToken"
     },
@@ -1928,7 +1928,7 @@
       "registration": "r.Post(\"/checkout-sessions\", h.CreateCloudWorkspaceSubscriptionCheckout)",
       "implementation_scope": "exclude",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/cloud_billing.go:197): customer_email, idempotency_key, interval, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateCloudWorkspaceSubscriptionCheckout",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools"
@@ -1988,7 +1988,7 @@
       "registration": "r.Get(\"/api/assignee-frequency\", h.GetAssigneeFrequency)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/activity.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/activity.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/activity.go:409): assignee_id, assignee_type, frequency. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetAssigneeFrequency"
     },
@@ -1999,7 +1999,7 @@
       "registration": "r.Get(\"/manifest\", h.GetSearchIndexManifest)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/search_index.go:280): comment_count, cursor, e, i, issue_count, project_count, s, t, text_bytes, v, x. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetSearchIndexManifest"
     },
@@ -2009,8 +2009,8 @@
       "line": 1997,
       "registration": "r.Get(\"/snapshot\", h.GetSearchIndexSnapshot)",
       "implementation_scope": "include",
-      "query_fields": "Handler server/internal/handler/search_index.go: query keys observed after_number, limit",
-      "request_body": "Handler server/internal/handler/search_index.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "query_fields": "Source-observed query keys (server/internal/handler/search_index.go:312): after_number, limit. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/search_index.go:312): comments, done, issues, next_after_number, projects. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetSearchIndexSnapshot"
     },
@@ -2021,7 +2021,7 @@
       "registration": "r.Post(\"/changes\", h.ListSearchIndexChanges)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/search_index.go:401): comments, cursor, deleted, e, has_more, i, issues, projects, s, t, v, x. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListSearchIndexChanges"
     },
@@ -2032,7 +2032,7 @@
       "registration": "r.Get(\"/limit-usage\", h.GetIssueLimitUsage)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_limit.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/issue_limit.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_limit.go:19): limit, used. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetIssueLimitUsage"
     },
@@ -2043,7 +2043,7 @@
       "registration": "r.Post(\"/table/groups\", h.ListIssueTableGroups)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_table_group.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_table_group.go:892): branch_identity, group_cursor_key, group_key, group_order, group_sort_key, groups, id, jsonrpc, method, next_cursor, params, parent_id, query, query_fingerprint, row_created_at, row_id, sort_is_null, sort_value, total, v. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListIssueTableGroups"
     },
@@ -2054,7 +2054,7 @@
       "registration": "r.Post(\"/table/rows\", h.ListIssueTableRows)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_table_rows.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_table_rows.go:233): assignee_id, assignee_type, attachments, branch_identity, branch_total, created_at, creator_id, creator_type, description, direct_child_count, due_date, duplicate_of, group_cursor_key, group_key, group_order, group_sort_key, id, identifier, issue, jsonrpc, labels, last_activity_at, metadata, method, next_cursor, number, params, parent_id, parent_issue_id, position, priority, project_id, properties, query, query_fingerprint, reactions, revision, row_created_at, row_id, rows, sort_is_null, sort_value, source_context, stage, start_date, status, status_category, status_name, title, total, updated_at, v, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListIssueTableRows"
     },
@@ -2065,7 +2065,7 @@
       "registration": "r.Post(\"/table/facets\", h.ListIssueTableFacets)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_table_facets.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_table_facets.go:350): facets, id, jsonrpc, method, params, query_fingerprint, total. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListIssueTableFacets"
     },
@@ -2075,8 +2075,8 @@
       "line": 2007,
       "registration": "r.Get(\"/search\", h.SearchIssues)",
       "implementation_scope": "include",
-      "query_fields": "q (required); limit (default 20, max 50), offset (default 0), include_closed=true to include terminal issues.",
-      "request_body": "No body.",
+      "query_fields": "Source-observed query keys (server/internal/handler/issue.go:1122): include_closed, limit, offset, q. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue.go:1122): assignee_id, assignee_type, attachments, created_at, creator_id, creator_type, description, due_date, duplicate_of, id, identifier, labels, last_activity_at, match_source, matched_comment_snippet, matched_description_snippet, matched_snippet, metadata, number, parent_issue_id, position, priority, project_id, properties, reactions, revision, source_context, stage, start_date, status, status_category, status_name, title, updated_at, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SearchIssues",
       "description": "GET /api/issues/search. SearchIssues: q (required); limit (default 20, max 50), offset (default 0), include_closed=true to include terminal issues. No body."
@@ -2088,7 +2088,7 @@
       "registration": "r.Get(\"/child-progress\", h.ChildIssueProgress)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue.go:2651): done, parent_issue_id, total. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ChildIssueProgress"
     },
@@ -2098,7 +2098,7 @@
       "line": 2009,
       "registration": "r.Get(\"/children\", h.ListChildrenByParents)",
       "implementation_scope": "include",
-      "query_fields": "Handler literal Get/Has keys observed: parent_ids (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
+      "query_fields": "Source-observed query keys (server/internal/handler/issue.go:2578): parent_ids. Delegated helpers may accept additional keys.",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListChildrenByParents"
@@ -2109,8 +2109,8 @@
       "line": 2010,
       "registration": "r.Get(\"/grouped\", h.ListGroupedIssues)",
       "implementation_scope": "include",
-      "query_fields": "Handler server/internal/handler/issue.go: query keys observed assignee_filters, assignee_id, assignee_ids, assignee_types, creator_filters, creator_id, direction, group_assignee_id, group_assignee_type, group_by, include_no_assignee, include_no_project, involves_user_id, label_ids, limit, metadata, offset, priorities, priority, project_id, project_ids, properties, sort, status, status_categories, status_category, statuses",
-      "request_body": "Handler server/internal/handler/issue.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "query_fields": "Source-observed query keys (server/internal/handler/issue.go:2000): assignee_filters, assignee_id, assignee_ids, assignee_types, creator_filters, creator_id, direction, group_assignee_id, group_assignee_type, group_by, include_no_assignee, include_no_project, involves_user_id, label_ids, limit, metadata, offset, priorities, priority, project_id, project_ids, properties, sort, status, status_categories, status_category, statuses. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue.go:2000): assignee_id, assignee_type, groups, id, issues, total. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListGroupedIssues"
     },
@@ -2120,7 +2120,7 @@
       "line": 2011,
       "registration": "r.Get(\"/\", h.ListIssues)",
       "implementation_scope": "include",
-      "query_fields": "Filters: status, priority, assignee_id, assignee_ids (comma-separated UUIDs), creator_id, project_id, parent_issue_id, label_ids (comma-separated), search, include_closed, limit, offset, sort, order, cursor. Workspace is resolved from workspace header/context.",
+      "query_fields": "Source-observed query keys (server/internal/handler/issue.go:1287): assignee_filters, assignee_id, assignee_ids, assignee_types, creator_filters, creator_id, direction, ids, include_no_assignee, include_no_project, involves_user_id, label_ids, limit, metadata, offset, open_only, priorities, priority, project_id, project_ids, properties, q, scheduled, sort, status, status_categories, status_category, statuses, top_level_only. Delegated helpers may accept additional keys.",
       "request_body": "No body.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListIssues",
@@ -2144,8 +2144,8 @@
       "line": 2015,
       "registration": "r.Post(\"/\", h.CreateIssue)",
       "implementation_scope": "include",
-      "query_fields": "Workspace context required.",
-      "request_body": "JSON fields include title, description, status, priority, assignee_type, assignee_id, parent_issue_id, project_id, acceptance_criteria, context_refs, start_date, due_date, labels; see endpoint validation. Do not assume status/priority enums.",
+      "query_fields": "Source-observed query keys (server/internal/handler/issue.go:3185): X-Task-ID. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue.go:3185): allow_duplicate, assignee_id, assignee_type, attachment_ids, description, due_date, label_ids, origin_id, origin_type, parent_issue_id, priority, project_id, properties, stage, start_date, status, title. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateIssue",
       "description": "POST /api/issues. CreateIssue: Workspace context required. JSON fields include title, description, status, priority, assignee_type, assignee_id, parent_issue_id, project_id, acceptance_criteria, context_refs, start_date, due_date, labels; see endpoint validation. Do not assume status/priority enums."
@@ -2157,7 +2157,7 @@
       "registration": "r.Post(\"/quick-create\", h.QuickCreateIssue)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue.go:2730): agent_id, attachment_ids, due_date, parent_issue_id, priority, project_id, prompt, squad_id, task_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "QuickCreateIssue"
     },
@@ -2168,7 +2168,7 @@
       "registration": "r.Post(\"/preview-trigger\", h.PreviewIssueTrigger)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_trigger.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_trigger.go:146): agent_id, assignee_id, assignee_type, is_create, issue_id, issue_ids, source, status, total_count, triggers. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "PreviewIssueTrigger"
     },
@@ -2190,7 +2190,7 @@
       "registration": "r.Post(\"/batch-delete\", h.BatchDeleteIssues)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue.go:4849): issue_ids. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "BatchDeleteIssues"
     },
@@ -2247,7 +2247,7 @@
       "registration": "r.Post(\"/comments/trigger-preview\", h.PreviewCommentTriggers)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/comment.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/comment.go:1585): agents, blocked, content, editing_comment_id, parent_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "PreviewCommentTriggers"
     },
@@ -2258,7 +2258,7 @@
       "registration": "r.Post(\"/comments\", h.CreateComment)",
       "implementation_scope": "include",
       "query_fields": "Path id is issue UUID.",
-      "request_body": "JSON: content (required), parent_id (optional for threaded reply), plus supported attachment/reference fields. Content is plain comment text/markdown.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/comment.go:1702): content, parent_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateComment",
       "description": "POST /api/issues/{id}/comments. CreateComment: Path id is issue UUID. JSON: content (required), parent_id (optional for threaded reply), plus supported attachment/reference fields. Content is plain comment text/markdown."
@@ -2269,7 +2269,7 @@
       "line": 2027,
       "registration": "r.Get(\"/comments\", h.ListComments)",
       "implementation_scope": "include",
-      "query_fields": "Path id is issue UUID; optional pagination/filter fields are passed through as query.",
+      "query_fields": "Source-observed query keys (server/internal/handler/comment.go:415): before, before-id, before_id, fold, recent, roots-only, roots_only, since, summary, tail, thread. Delegated helpers may accept additional keys.",
       "request_body": "No body.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListComments",
@@ -2281,8 +2281,8 @@
       "line": 2028,
       "registration": "r.Get(\"/timeline\", h.ListTimeline)",
       "implementation_scope": "include",
-      "query_fields": "Path id is issue UUID; supports handler-defined pagination/cursor query parameters.",
-      "request_body": "No body.",
+      "query_fields": "Source-observed query keys (server/internal/handler/activity.go:156): after, around, before, limit. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/activity.go:156): entries, has_more_after, has_more_before, next_cursor, prev_cursor, target_index. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListTimeline",
       "description": "GET /api/issues/{id}/timeline. ListTimeline: Path id is issue UUID; supports handler-defined pagination/cursor query parameters. No body."
@@ -2352,7 +2352,7 @@
       "registration": "r.Post(\"/wakeups\", h.CreateIssueWakeup)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_wakeup.go:192): after_seconds, agent_id, at, condition, cron_expression, event_types, expires_at, expires_in_seconds, filter_actor_id, filter_actor_type, filter_agent_id, filter_task_id, instruction, interval_seconds, kind, max_fires, mode, on_timeout, parent_comment_id, timezone. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateIssueWakeup"
     },
@@ -2363,7 +2363,7 @@
       "registration": "r.Put(\"/wakeups/{wakeupID}\", h.CreateIssueWakeup)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_wakeup.go:192): after_seconds, agent_id, at, condition, cron_expression, event_types, expires_at, expires_in_seconds, filter_actor_id, filter_actor_type, filter_agent_id, filter_task_id, instruction, interval_seconds, kind, max_fires, mode, on_timeout, parent_comment_id, timezone. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateIssueWakeup"
     },
@@ -2385,7 +2385,7 @@
       "registration": "r.Post(\"/wakeups/{wakeupID}/enable\", h.EnableIssueWakeup)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_wakeup.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_wakeup.go:272): at, rearm, revision. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "EnableIssueWakeup"
     },
@@ -2396,7 +2396,7 @@
       "registration": "r.Patch(\"/wakeups/{wakeupID}/instruction\", h.EditIssueWakeupInstruction)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_wakeup.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_wakeup.go:303): expected_instruction, instruction, revision. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "EditIssueWakeupInstruction"
     },
@@ -2440,7 +2440,7 @@
       "registration": "r.Get(\"/wakeups/{wakeupID}/runs\", h.ListIssueWakeupRuns)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_wakeup.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/issue_wakeup.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_wakeup.go:434): checkin_note, commented, completed_at, created_at, id, started_at, status, triggers. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListIssueWakeupRuns"
     },
@@ -2462,7 +2462,7 @@
       "registration": "r.Put(\"/system-wakeups/{rule}\", h.UpdateIssueSystemWakeup)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_system_wakeup.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_system_wakeup.go:212): enabled, instruction. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateIssueSystemWakeup"
     },
@@ -2495,7 +2495,7 @@
       "registration": "r.Post(\"/rerun\", h.RerunIssue)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/task_lifecycle.go:165): task_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RerunIssue"
     },
@@ -2527,8 +2527,8 @@
       "line": 2052,
       "registration": "r.Get(\"/task-runs\", h.ListTasksByIssue)",
       "implementation_scope": "include",
-      "query_fields": "Path id is issue UUID; supports task-run pagination query parameters.",
-      "request_body": "No body.",
+      "query_fields": "Source-observed query keys (server/internal/handler/daemon.go:5580): active, scope. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/daemon.go:5580): agent_id, created_at, issue_id, issue_identifier, issue_title, started_at, status, task_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListTasksByIssue",
       "description": "GET /api/issues/{id}/task-runs. ListTasksByIssue: Path id is issue UUID; supports task-run pagination query parameters. No body."
@@ -2618,7 +2618,7 @@
       "registration": "r.Post(\"/labels\", h.AttachLabel)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/label.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/label.go:419): label_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "AttachLabel"
     },
@@ -2651,7 +2651,7 @@
       "registration": "r.Put(\"/metadata/{key}\", h.SetIssueMetadataKey)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_metadata.go:157): value. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SetIssueMetadataKey"
     },
@@ -2673,7 +2673,7 @@
       "registration": "r.Put(\"/properties/{propertyId}\", h.SetIssueProperty)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/property.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/property.go:675): value. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SetIssueProperty"
     },
@@ -2706,7 +2706,7 @@
       "registration": "r.Post(\"/pull-requests\", h.LinkIssuePullRequest)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/pr_auto_complete.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/pr_auto_complete.go:459): pull_request_id, url. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "LinkIssuePullRequest"
     },
@@ -2728,7 +2728,7 @@
       "registration": "r.Put(\"/pr-auto-complete\", h.SetIssuePRAutoComplete)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/pr_auto_complete.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/pr_auto_complete.go:596): disabled. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SetIssuePRAutoComplete"
     },
@@ -2738,7 +2738,7 @@
       "line": 2075,
       "registration": "r.Get(\"/api/tasks/{taskId}/messages\", h.ListTaskMessagesByUser)",
       "implementation_scope": "include",
-      "query_fields": "Path taskId identifies task; optional cursor/limit pagination.",
+      "query_fields": "Source-observed query keys (server/internal/handler/daemon.go:5786): since. Delegated helpers may accept additional keys.",
       "request_body": "No body.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListTaskMessagesByUser",
@@ -2750,8 +2750,8 @@
       "line": 2081,
       "registration": "r.Get(\"/\", h.ListQuickActions)",
       "implementation_scope": "include",
-      "query_fields": "Handler literal Get/Has keys observed: include_archived (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/quick_action.go:487): include_archived. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/quick_action.go:487): quick_actions. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListQuickActions"
     },
@@ -2762,7 +2762,7 @@
       "registration": "r.Post(\"/\", h.CreateQuickAction)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/quick_action.go:522): assignee_id, assignee_type, description, name, prompt, visibility. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateQuickAction"
     },
@@ -2773,7 +2773,7 @@
       "registration": "r.Patch(\"/\", h.UpdateQuickAction)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/quick_action.go:596): assignee_id, assignee_type, description, name, prompt, status, visibility. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateQuickAction"
     },
@@ -2794,7 +2794,7 @@
       "line": 2091,
       "registration": "r.Get(\"/\", h.ListProperties)",
       "implementation_scope": "include",
-      "query_fields": "Handler server/internal/handler/property.go: query keys observed include_archived",
+      "query_fields": "Source-observed query keys (server/internal/handler/property.go:421): include_archived. Delegated helpers may accept additional keys.",
       "request_body": "Handler server/internal/handler/property.go: request contract may use a referenced type; forward REST JSON unchanged",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListProperties"
@@ -2806,7 +2806,7 @@
       "registration": "r.Post(\"/\", h.CreateProperty)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/property.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/property.go:467): config, description, icon, name, type. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateProperty"
     },
@@ -2828,7 +2828,7 @@
       "registration": "r.Patch(\"/\", h.UpdateProperty)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/property.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/property.go:544): archived, config, description, icon, name. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateProperty"
     },
@@ -2838,7 +2838,7 @@
       "line": 2101,
       "registration": "r.Get(\"/\", h.ListLabels)",
       "implementation_scope": "include",
-      "query_fields": "Handler literal Get/Has keys observed: resource_type (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
+      "query_fields": "Source-observed query keys (server/internal/handler/label.go:144): resource_type. Delegated helpers may accept additional keys.",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListLabels"
@@ -2850,7 +2850,7 @@
       "registration": "r.Post(\"/\", h.CreateLabel)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/label.go:192): color, description, name, resource_type. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateLabel"
     },
@@ -2872,7 +2872,7 @@
       "registration": "r.Put(\"/\", h.UpdateLabel)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/label.go:240): color, description, name. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateLabel"
     },
@@ -2893,7 +2893,7 @@
       "line": 2114,
       "registration": "r.Get(\"/\", h.ListIssueStatuses)",
       "implementation_scope": "include",
-      "query_fields": "Handler server/internal/handler/issue_status.go: query keys observed include_archived",
+      "query_fields": "Source-observed query keys (server/internal/handler/issue_status.go:98): include_archived. Delegated helpers may accept additional keys.",
       "request_body": "Handler server/internal/handler/issue_status.go: request contract may use a referenced type; forward REST JSON unchanged",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListIssueStatuses"
@@ -2905,7 +2905,7 @@
       "registration": "r.Post(\"/\", h.CreateIssueStatus)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_status.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_status.go:139): category, color, description, icon, key, name. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateIssueStatus"
     },
@@ -2916,7 +2916,7 @@
       "registration": "r.Patch(\"/reorder\", h.ReorderIssueStatuses)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_status.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_status.go:529): category, ids, include_system. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ReorderIssueStatuses"
     },
@@ -2927,7 +2927,7 @@
       "registration": "r.Patch(\"/\", h.UpdateIssueStatus)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_status.go:286): color, description, icon, name, position. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateIssueStatus"
     },
@@ -2948,8 +2948,8 @@
       "line": 2125,
       "registration": "r.Get(\"/search\", h.SearchProjects)",
       "implementation_scope": "include",
-      "query_fields": "q (search text); optional limit/offset pagination.",
-      "request_body": "No body.",
+      "query_fields": "Source-observed query keys (server/internal/handler/project.go:885): include_closed, limit, offset, q. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/project.go:885): created_at, description, done_count, due_date, icon, id, issue_count, issue_prefix, lead_id, lead_type, match_source, matched_snippet, priority, resource_count, start_date, status, title, updated_at, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SearchProjects",
       "description": "GET /api/projects/search. SearchProjects: q (search text); optional limit/offset pagination. No body."
@@ -2960,7 +2960,7 @@
       "line": 2126,
       "registration": "r.Get(\"/\", h.ListProjects)",
       "implementation_scope": "include",
-      "query_fields": "status and priority filters; workspace resolved from workspace context.",
+      "query_fields": "Source-observed query keys (server/internal/handler/project.go:140): priority, status. Delegated helpers may accept additional keys.",
       "request_body": "No body.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListProjects",
@@ -2973,7 +2973,7 @@
       "registration": "r.Post(\"/\", h.CreateProject)",
       "implementation_scope": "include",
       "query_fields": "Workspace context required.",
-      "request_body": "JSON fields include title, description, status, priority, color, start_date, target_date, lead_id, and metadata supported by handler. No enum assumptions.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/project.go:262): description, due_date, icon, issue_prefix, lead_id, lead_type, priority, resources, start_date, status, title. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateProject",
       "description": "POST /api/projects. CreateProject: Workspace context required. JSON fields include title, description, status, priority, color, start_date, target_date, lead_id, and metadata supported by handler. No enum assumptions."
@@ -3031,7 +3031,7 @@
       "registration": "r.Post(\"/resources\", h.CreateProjectResource)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/project_resource.go:547): label, position, resource_ref, resource_type. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateProjectResource"
     },
@@ -3130,7 +3130,7 @@
       "registration": "r.Get(\"/members/status\", h.ListSquadMemberStatus)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/squad.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/squad.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/squad.go:654): active_issues, identifier, issue_id, issue_status, last_active_at, member_id, member_type, members, status, title. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListSquadMemberStatus"
     },
@@ -3173,7 +3173,7 @@
       "line": 2156,
       "registration": "r.Post(\"/api/issues/{id}/squad-evaluated\", h.RecordSquadLeaderEvaluation)",
       "implementation_scope": "include",
-      "query_fields": "Handler server/internal/handler/squad.go: query keys observed X-Task-ID",
+      "query_fields": "Source-observed query keys (server/internal/handler/squad.go:976): X-Task-ID. Delegated helpers may accept additional keys.",
       "request_body": "Inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RecordSquadLeaderEvaluation"
@@ -3184,7 +3184,7 @@
       "line": 2160,
       "registration": "r.Get(\"/\", h.ListAutopilots)",
       "implementation_scope": "include",
-      "query_fields": "Optional workspace/project/filter query parameters as accepted by handler.",
+      "query_fields": "Source-observed query keys (server/internal/handler/autopilot.go:439): status. Delegated helpers may accept additional keys.",
       "request_body": "No body.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListAutopilots",
@@ -3197,7 +3197,7 @@
       "registration": "r.Post(\"/\", h.CreateAutopilot)",
       "implementation_scope": "include",
       "query_fields": "Workspace context required.",
-      "request_body": "JSON fields include title, description, project_id, assignee_type, assignee_id, status, and supported configuration. Do not supply signing secrets.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/autopilot.go:808): assignee_id, assignee_type, description, execution_mode, issue_title_template, project_id, subscribers, title. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateAutopilot",
       "description": "POST /api/autopilots. CreateAutopilot: Workspace context required. JSON fields include title, description, project_id, assignee_type, assignee_id, status, and supported configuration. Do not supply signing secrets."
@@ -3208,7 +3208,7 @@
       "line": 2162,
       "registration": "r.Get(\"/cron-preview\", h.CronPreview)",
       "implementation_scope": "include",
-      "query_fields": "Handler server/internal/handler/autopilot_cron_preview.go: query keys observed expr, tz",
+      "query_fields": "Source-observed query keys (server/internal/handler/autopilot_cron_preview.go:26): expr, tz. Delegated helpers may accept additional keys.",
       "request_body": "Handler server/internal/handler/autopilot_cron_preview.go: request contract may use a referenced type; forward REST JSON unchanged",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CronPreview"
@@ -3220,7 +3220,7 @@
       "registration": "r.Get(\"/usage\", h.GetAutopilotQuotaUsage)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/autopilot.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/autopilot.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/autopilot.go:2438): action, blocked_counts, limit, period_end, period_start, reached, reserved, reset_at, total, used. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetAutopilotQuotaUsage"
     },
@@ -3264,7 +3264,7 @@
       "line": 2168,
       "registration": "r.Post(\"/trigger\", h.TriggerAutopilot)",
       "implementation_scope": "include",
-      "query_fields": "Path id is autopilot UUID.",
+      "query_fields": "Source-observed query keys (server/internal/handler/autopilot.go:2365): Idempotency-Key. Delegated helpers may accept additional keys.",
       "request_body": "Optional JSON trigger input/context accepted by handler; omit body if not needed.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "TriggerAutopilot",
@@ -3276,7 +3276,7 @@
       "line": 2169,
       "registration": "r.Get(\"/runs\", h.ListAutopilotRuns)",
       "implementation_scope": "include",
-      "query_fields": "Path id is autopilot UUID; supports pagination/status filters.",
+      "query_fields": "Source-observed query keys (server/internal/handler/autopilot.go:2256): limit, offset. Delegated helpers may accept additional keys.",
       "request_body": "No body.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListAutopilotRuns",
@@ -3300,7 +3300,7 @@
       "line": 2171,
       "registration": "r.Get(\"/deliveries\", h.ListAutopilotDeliveries)",
       "implementation_scope": "include",
-      "query_fields": "Handler server/internal/handler/webhook_delivery.go: query keys observed limit, offset",
+      "query_fields": "Source-observed query keys (server/internal/handler/webhook_delivery.go:161): limit, offset. Delegated helpers may accept additional keys.",
       "request_body": "Handler server/internal/handler/webhook_delivery.go: request contract may use a referenced type; forward REST JSON unchanged",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListAutopilotDeliveries"
@@ -3322,7 +3322,7 @@
       "line": 2173,
       "registration": "r.Post(\"/deliveries/{deliveryId}/replay\", h.ReplayAutopilotDelivery)",
       "implementation_scope": "exclude",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/webhook_delivery.go:237): Idempotency-Key. Delegated helpers may accept additional keys.",
       "request_body": "Inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ReplayAutopilotDelivery",
@@ -3335,7 +3335,7 @@
       "registration": "r.Post(\"/triggers\", h.CreateAutopilotTrigger)",
       "implementation_scope": "include",
       "query_fields": "Path id is autopilot UUID.",
-      "request_body": "Trigger JSON fields depend on trigger kind; handler accepts trigger type/configuration and schedule/event-specific settings. Never include webhook signing secret.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/autopilot.go:1514): cron_expression, event_filters, kind, label, provider, timezone. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateAutopilotTrigger",
       "description": "POST /api/autopilots/{id}/triggers. CreateAutopilotTrigger: Path id is autopilot UUID. Trigger JSON fields depend on trigger kind; handler accepts trigger type/configuration and schedule/event-specific settings. Never include webhook signing secret."
@@ -3347,7 +3347,7 @@
       "registration": "r.Patch(\"/\", h.UpdateAutopilotTrigger)",
       "implementation_scope": "include",
       "query_fields": "Path id and triggerId identify trigger.",
-      "request_body": "Partial trigger configuration JSON; do not include webhook signing secret.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/autopilot.go:1876): cron_expression, enabled, event_filters, label, timezone. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateAutopilotTrigger",
       "description": "PATCH /api/autopilots/{id}/triggers/{triggerId}. UpdateAutopilotTrigger: Path id and triggerId identify trigger. Partial trigger configuration JSON; do not include webhook signing secret."
@@ -3384,7 +3384,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential, secret, token, signing, or webhook delivery/control surface is excluded from general REST tools.",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/autopilot.go:2191): signing_secret. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SetAutopilotTriggerSigningSecret"
     },
@@ -3395,7 +3395,7 @@
       "registration": "r.Post(\"/collaborators\", h.AddAutopilotCollaborator)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/autopilot.go:1420): user_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "AddAutopilotCollaborator"
     },
@@ -3416,7 +3416,7 @@
       "line": 2188,
       "registration": "r.Get(\"/\", h.ListPins)",
       "implementation_scope": "include",
-      "query_fields": "Handler server/internal/handler/pin.go: query keys observed include",
+      "query_fields": "Source-observed query keys (server/internal/handler/pin.go:53): include. Delegated helpers may accept additional keys.",
       "request_body": "Handler server/internal/handler/pin.go: request contract may use a referenced type; forward REST JSON unchanged",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListPins"
@@ -3428,7 +3428,7 @@
       "registration": "r.Post(\"/\", h.CreatePin)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/pin.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/pin.go:87): item_id, item_type. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreatePin"
     },
@@ -3439,7 +3439,7 @@
       "registration": "r.Put(\"/reorder\", h.ReorderPins)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/pin.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/pin.go:213): items. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ReorderPins"
     },
@@ -3460,8 +3460,8 @@
       "line": 2195,
       "registration": "r.Get(\"/api/issue-view-preferences\", h.GetIssueViewPreference)",
       "implementation_scope": "include",
-      "query_fields": "Handler literal Get/Has keys observed: scope_id, scope_type (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/issue_view_preference.go:59): scope_id, scope_type. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_view_preference.go:59): prefs, scope_id, scope_type, updated_at. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetIssueViewPreference"
     },
@@ -3472,7 +3472,7 @@
       "registration": "r.Put(\"/api/issue-view-preferences\", h.PutIssueViewPreference)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_view_preference.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_view_preference.go:107): prefs, scope_id, scope_type, updated_at. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "PutIssueViewPreference"
     },
@@ -3482,7 +3482,7 @@
       "line": 2198,
       "registration": "r.Get(\"/\", h.ListIssueViews)",
       "implementation_scope": "include",
-      "query_fields": "Handler server/internal/handler/issue_view.go: query keys observed scope_id, scope_type",
+      "query_fields": "Source-observed query keys (server/internal/handler/issue_view.go:230): scope_id, scope_type. Delegated helpers may accept additional keys.",
       "request_body": "Handler server/internal/handler/issue_view.go: request contract may use a referenced type; forward REST JSON unchanged",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListIssueViews"
@@ -3494,7 +3494,7 @@
       "registration": "r.Post(\"/\", h.CreateIssueView)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_view.go:123): definition_version, display, name, query, scope_id, scope_type, scope_variant, visibility. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateIssueView"
     },
@@ -3516,7 +3516,7 @@
       "registration": "r.Patch(\"/\", h.UpdateIssueView)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_view.go:334): display, expected_revision, name, query, scope_variant, visibility. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateIssueView"
     },
@@ -3647,8 +3647,8 @@
       "line": 2237,
       "registration": "r.Get(\"/\", h.ListAgents)",
       "implementation_scope": "include",
-      "query_fields": "Optional workspace/project/role/status filters and pagination as accepted by handler.",
-      "request_body": "No body.",
+      "query_fields": "Source-observed query keys (server/internal/handler/agent.go:1114): include_archived. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/agent.go:1114): description, enabled, id, name. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListAgents",
       "description": "GET /api/agents. ListAgents: Optional workspace/project/role/status filters and pagination as accepted by handler. No body."
@@ -3671,7 +3671,7 @@
       "registration": "r.Post(\"/mika\", h.CreateMikaAgent)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/mika_agent.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/mika_agent.go:82): language, model, runtime_id, session_title. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateMikaAgent"
     },
@@ -3727,7 +3727,7 @@
       "registration": "r.Post(\"/cancel-tasks\", h.CancelAgentTasks)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/agent.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/agent.go:2655): cancelled. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CancelAgentTasks"
     },
@@ -3737,7 +3737,7 @@
       "line": 2250,
       "registration": "r.Get(\"/tasks\", h.ListAgentTasks)",
       "implementation_scope": "include",
-      "query_fields": "Path id is agent UUID; supports status and cursor pagination.",
+      "query_fields": "Source-observed query keys (server/internal/handler/agent.go:2684): before, include_usage, limit. Delegated helpers may accept additional keys.",
       "request_body": "No body.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListAgentTasks",
@@ -3750,7 +3750,7 @@
       "registration": "r.Get(\"/dingtalk/groups\", h.ListDingTalkGroupsForAgent)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/dingtalk.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/dingtalk.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/dingtalk.go:251): bot_identities, group_discovery_supported, groups, inactive_group_counts, next_offset. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListDingTalkGroupsForAgent"
     },
@@ -3772,7 +3772,7 @@
       "registration": "r.Put(\"/skills\", h.SetAgentSkills)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/skill.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/skill.go:2610): skill_ids. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SetAgentSkills"
     },
@@ -3783,7 +3783,7 @@
       "registration": "r.Post(\"/skills/add\", h.AddAgentSkills)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/skill.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/skill.go:2665): skill_ids. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "AddAgentSkills"
     },
@@ -3805,7 +3805,7 @@
       "registration": "r.Post(\"/labels\", h.AttachLabelToAgent)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/label.go:591): label_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "AttachLabelToAgent"
     },
@@ -3838,7 +3838,7 @@
       "registration": "r.Put(\"/runtime-skills/enabled\", h.SetAgentRuntimeSkillEnabled)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/agent_runtime_skills.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/agent_runtime_skills.go:84): key, name, plugin, provider, root, runtime_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SetAgentRuntimeSkillEnabled"
     },
@@ -3860,7 +3860,7 @@
       "registration": "r.Get(\"/mcp-servers\", h.ListAgentMcpServers)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/workspace_mcp_api.go:338): agent_count, created_at, enabled, id, name, transport, updated_at, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListAgentMcpServers"
     },
@@ -3871,7 +3871,7 @@
       "registration": "r.Post(\"/mcp-servers\", h.AddAgentMcpServer)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/workspace_mcp_api.go:395): server_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "AddAgentMcpServer"
     },
@@ -3882,7 +3882,7 @@
       "registration": "r.Put(\"/mcp-servers/{serverId}/enabled\", h.SetAgentMcpServerEnabled)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/workspace_mcp_api.go:459): enabled. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SetAgentMcpServerEnabled"
     },
@@ -3904,7 +3904,7 @@
       "registration": "r.Get(\"/env\", h.GetAgentEnv)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/agent_env.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/agent_env.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/agent_env.go:141): agent_id, custom_env. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetAgentEnv"
     },
@@ -3915,7 +3915,7 @@
       "registration": "r.Put(\"/env\", h.UpdateAgentEnv)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/agent_env.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/agent_env.go:190): agent_id, custom_env. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateAgentEnv"
     },
@@ -3927,7 +3927,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/agent_builder.go:192): created_at, draft, last_message_at, last_message_content, last_message_role, runtime_id, session_id, sessions, title, updated_at. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListAgentBuilderSessions"
     },
@@ -3939,7 +3939,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/agent_builder.go:57): builder_agent_id, model, runtime_id, session_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateAgentBuilderSession"
     },
@@ -3951,7 +3951,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/agent_builder.go:401): runtime_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SwitchAgentBuilderRuntime"
     },
@@ -3963,7 +3963,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/agent_builder.go:256): draft. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SaveAgentBuilderDraft"
     },
@@ -3985,7 +3985,7 @@
       "registration": "r.Post(\"/\", h.CreateSkill)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/skill.go:527): config, content, description, files, name. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateSkill"
     },
@@ -3995,7 +3995,7 @@
       "line": 2295,
       "registration": "r.Get(\"/search\", h.SearchSkills)",
       "implementation_scope": "include",
-      "query_fields": "Handler server/internal/handler/skill.go: query keys observed q",
+      "query_fields": "Source-observed query keys (server/internal/handler/skill.go:412): q. Delegated helpers may accept additional keys.",
       "request_body": "Handler server/internal/handler/skill.go: request contract may use a referenced type; forward REST JSON unchanged",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SearchSkills"
@@ -4007,7 +4007,7 @@
       "registration": "r.Post(\"/import\", h.ImportSkill)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/skill.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/skill.go:2311): on_conflict, url. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ImportSkill"
     },
@@ -4018,7 +4018,7 @@
       "registration": "r.Get(\"/\", h.GetSkill)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/skill.go:467): config, content, created_at, created_by, description, files, id, name, updated_at, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetSkill"
     },
@@ -4029,7 +4029,7 @@
       "registration": "r.Put(\"/\", h.UpdateSkill)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/skill.go:606): config, content, created_at, created_by, description, files, id, name, updated_at, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateSkill"
     },
@@ -4073,7 +4073,7 @@
       "registration": "r.Post(\"/labels\", h.AttachLabelToSkill)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/label.go:654): label_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "AttachLabelToSkill"
     },
@@ -4106,7 +4106,7 @@
       "registration": "r.Put(\"/files\", h.UpsertSkillFile)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/skill.go:2517): content, path. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpsertSkillFile"
     },
@@ -4150,7 +4150,7 @@
       "registration": "r.Get(\"/agent-runtime\", h.GetDashboardAgentRunTime)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/dashboard.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/dashboard.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/dashboard.go:384): agent_id, cancelled_count, failed_count, metered_task_count, task_count, total_seconds. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetDashboardAgentRunTime"
     },
@@ -4161,7 +4161,7 @@
       "registration": "r.Get(\"/runtime/daily\", h.GetDashboardRunTimeDaily)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/dashboard.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/dashboard.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/dashboard.go:474): cancelled_count, date, failed_count, task_count, total_seconds. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetDashboardRunTimeDaily"
     },
@@ -4172,7 +4172,7 @@
       "registration": "r.Get(\"/failures/daily\", h.GetDashboardFailuresDaily)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/dashboard.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/dashboard.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/dashboard.go:541): date, failure_reason, task_count. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetDashboardFailuresDaily"
     },
@@ -4183,7 +4183,7 @@
       "registration": "r.Get(\"/failures/by-agent\", h.GetDashboardFailuresByAgent)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/dashboard.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/dashboard.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/dashboard.go:588): agent_id, failure_reason, task_count. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetDashboardFailuresByAgent"
     },
@@ -4193,7 +4193,7 @@
       "line": 2325,
       "registration": "r.Get(\"/\", h.ListAgentRuntimes)",
       "implementation_scope": "include",
-      "query_fields": "Handler literal Get/Has keys observed: owner (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
+      "query_fields": "Source-observed query keys (server/internal/handler/runtime.go:902): owner. Delegated helpers may accept additional keys.",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListAgentRuntimes"
@@ -4205,7 +4205,7 @@
       "registration": "r.Patch(\"/\", h.UpdateAgentRuntime)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/runtime.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/runtime.go:489): apply_to_machine, custom_name, visibility. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateAgentRuntime"
     },
@@ -4227,7 +4227,7 @@
       "registration": "r.Get(\"/usage/by-agent\", h.GetRuntimeUsageByAgent)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/runtime.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/runtime.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/runtime.go:224): agent_id, cache_read_tokens, cache_write_tokens, cost_usd_ticks, input_tokens, model, output_tokens, provider, task_count, uncosted_cache_read_tokens, uncosted_cache_write_tokens, uncosted_input_tokens, uncosted_output_tokens. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetRuntimeUsageByAgent"
     },
@@ -4238,7 +4238,7 @@
       "registration": "r.Get(\"/usage/by-hour\", h.GetRuntimeUsageByHour)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/runtime.go:296): cache_read_tokens, cache_write_tokens, cost_usd_ticks, hour, input_tokens, model, output_tokens, task_count, uncosted_cache_read_tokens, uncosted_cache_write_tokens, uncosted_input_tokens, uncosted_output_tokens. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetRuntimeUsageByHour"
     },
@@ -4249,7 +4249,7 @@
       "registration": "r.Get(\"/activity\", h.GetRuntimeTaskActivity)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/runtime.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/runtime.go: inline JSON fields count, hour",
+      "request_body": "Source-observed JSON fields (server/internal/handler/runtime.go:166): count, hour. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetRuntimeTaskActivity"
     },
@@ -4281,8 +4281,8 @@
       "line": 2334,
       "registration": "r.Post(\"/models\", h.InitiateListModels)",
       "implementation_scope": "include",
-      "query_fields": "Handler server/internal/handler/runtime_models.go: query keys observed force",
-      "request_body": "Inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/runtime_models.go:346): force. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/runtime_models.go:346): cached, cached_at, created_at, error, id, models, runtime_id, status, supported, unavailable_models, updated_at. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "InitiateListModels"
     },
@@ -4326,7 +4326,7 @@
       "registration": "r.Post(\"/local-skills/import\", h.InitiateImportLocalSkill)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/runtime_local_skills.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/runtime_local_skills.go:635): action, description, name, skill_key, supports_conflict, target_skill_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "InitiateImportLocalSkill"
     },
@@ -4359,7 +4359,7 @@
       "registration": "r.Post(\"/unbind-agents-and-delete\", h.UnbindAgentsAndDeleteRuntime)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/runtime.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/runtime.go:1200): expected_active_agent_ids. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UnbindAgentsAndDeleteRuntime"
     },
@@ -4370,7 +4370,7 @@
       "registration": "r.Post(\"/archive-agents-and-delete\", h.UnbindAgentsAndDeleteRuntime)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/runtime.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/runtime.go:1200): expected_active_agent_ids. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UnbindAgentsAndDeleteRuntime"
     },
@@ -4503,8 +4503,8 @@
       "line": 2373,
       "registration": "r.Post(\"/api/tasks/{taskId}/cancel\", h.CancelTaskByUser)",
       "implementation_scope": "include",
-      "query_fields": "Handler literal Get/Has keys observed: chat_session_id, expected_status, queue_action (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
-      "request_body": "Inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/chat.go:1780): chat_session_id, expected_status, queue_action. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:1780): agent, agent_id, attachments, attempt, attribution, auth_token, autopilot_description, autopilot_id, autopilot_run_id, autopilot_source, autopilot_title, autopilot_trigger_payload, branch_name, can_supplement, cancelled_by, cancelled_by_comment_change, cancelled_chat_message, chat_channel_delivers_files, chat_channel_type, chat_in_thread, chat_intro, chat_message, chat_message_attachments, chat_session_id, chat_type, coalesced_comment_ids, coalesced_comments, completed_at, connected_apps, content, created_at, delivered_comment_ids, dispatched_at, durable_work_dir, error, failure_reason, handoff_note, id, initiator_email, initiator_id, initiator_name, initiator_type, is_leader_task, issue_assignee_id, issue_assignee_type, issue_changed_fields, issue_id, issue_identifier, issue_state_delta_known, issue_status, issue_statuses, issue_statuses_omitted, kind, leader_role_resolved, max_attempts, message_id, new_comment_count, new_comments_delta_known, new_comments_since, parent_issue_id, parent_issue_identifier, parent_task_id, plugin_hook_tools, prior_session_id, prior_session_resume_unavailable, prior_work_dir, priority, project_description, project_id, project_resources, project_title, quick_create_attachment_ids, quick_create_due_date, quick_create_priority, quick_create_prompt, quick_create_source_context, relative_durable_work_dir, relative_work_dir, remote_mcp_connections, remote_mcp_daemon_token, repos, requesting_user_name, requesting_user_profile_description, restore_to_input, result, runtime_id, squad_id, squad_name, start_claim_supported, started_at, status, supplement_capability, supplement_comment_ids, thread_name, trigger_author_name, trigger_author_type, trigger_comment_content, trigger_comment_id, trigger_summary, trigger_thread_id, usage, wakeup_id, wakeup_joined, wakeup_system_rule, work_dir, workspace_context, workspace_id, workspace_slug. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CancelTaskByUser"
     },
@@ -4526,7 +4526,7 @@
       "registration": "r.Get(\"/api/issue-wakeup-summaries\", h.ListWorkspaceWakeupSummaries)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_wakeup.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/issue_wakeup.go: inline JSON fields condition",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_wakeup.go:159): condition. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListWorkspaceWakeupSummaries"
     },
@@ -4536,8 +4536,8 @@
       "line": 2379,
       "registration": "r.Get(\"/api/issue-wakeups\", h.ListWorkspaceWakeups)",
       "implementation_scope": "include",
-      "query_fields": "Handler literal Get/Has keys observed: agent_id, kind, scope, search, source (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/issue_wakeup.go:18): agent_id, kind, scope, search, source. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_wakeup.go:18): agents, counts, items, total. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListWorkspaceWakeups"
     },
@@ -4548,7 +4548,7 @@
       "registration": "r.Get(\"/api/issue-wakeup-paused\", h.ListPausedWakeups)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_wakeup.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/issue_wakeup.go: inline JSON fields agent_id, id, issue_id, paused_reason",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_wakeup.go:470): agent_id, id, issue_id, paused_reason. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListPausedWakeups"
     },
@@ -4570,7 +4570,7 @@
       "registration": "r.Put(\"/api/system-wakeups/{rule}\", h.UpdateWorkspaceSystemWakeup)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/issue_system_wakeup.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/issue_system_wakeup.go:291): enabled, instruction. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateWorkspaceSystemWakeup"
     },
@@ -4580,8 +4580,8 @@
       "line": 2386,
       "registration": "r.Get(\"/api/working-agents\", h.ListWorkspaceWorkingAgents)",
       "implementation_scope": "include",
-      "query_fields": "Handler literal Get/Has keys observed: parent, relation, scope, type (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/agent.go:2811): parent, relation, scope, type. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/agent.go:2811): avatar_url, id, issue_ids, name, running_task_count. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListWorkspaceWorkingAgents"
     },
@@ -4592,7 +4592,7 @@
       "registration": "r.Get(\"/api/agent-activity-30d\", h.GetWorkspaceAgentActivity30d)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/agent.go:2970): agent_id, bucket_at, cancelled_count, completed_count, duration_count, duration_ms, failed_count, task_count. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetWorkspaceAgentActivity30d"
     },
@@ -4603,7 +4603,7 @@
       "registration": "r.Get(\"/api/agent-run-counts\", h.GetWorkspaceAgentRunCounts)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/agent.go:2929): agent_id, run_count. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetWorkspaceAgentRunCounts"
     },
@@ -4615,7 +4615,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:40): agent_id, project_id, title. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateChatSession"
     },
@@ -4626,8 +4626,8 @@
       "registration": "r.Get(\"/\", h.ListChatSessions)",
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
-      "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/chat.go:155): status. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:155): agent_id, channel_source, created_at, creator_id, has_unread, id, is_current_channel_route, last_message, pinned, project_id, status, title, unread_count, updated_at, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListChatSessions"
     },
@@ -4651,7 +4651,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:355): project_id, title. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateChatSession"
     },
@@ -4663,7 +4663,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:478): pinned. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SetChatSessionPinned"
     },
@@ -4675,7 +4675,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:547): archived. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SetChatSessionArchived"
     },
@@ -4699,7 +4699,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:832): attachment_ids, content, created_at, message_id, queued, supports_queue, task_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "SendChatMessage"
     },
@@ -4711,7 +4711,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/mika_onboarding.go:56): created_at, language, message_id, started. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "StartMikaOnboarding"
     },
@@ -4723,7 +4723,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:1098): message_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "RegenerateChatQuickActions"
     },
@@ -4747,7 +4747,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:1207): created_at, has_more, id, limit, messages, next_cursor. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListChatMessagesPage"
     },
@@ -4759,7 +4759,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:1610): content, created_at, message_id, queued_tasks, status, supports_queue, task_id, wait_reason. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetPendingChatTask"
     },
@@ -4783,7 +4783,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:1661): active_task_id, task_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "PrioritizeQueuedChatTask"
     },
@@ -4807,7 +4807,7 @@
       "implementation_scope": "exclude",
       "scope_reason": "Credential/auth/session, external callback/webhook, transport stream, binary asset, health/diagnostic or non-API route excluded from general REST tools",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:1377): attachments, chat_session_id, content, created_at, id, restores, task_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListChatDraftRestores"
     },
@@ -4830,7 +4830,7 @@
       "registration": "r.Get(\"/api/chat/pending-tasks\", h.ListPendingChatTasks)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/chat.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/chat.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:1494): chat_session_id, status, task_id, tasks. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListPendingChatTasks"
     },
@@ -4841,7 +4841,7 @@
       "registration": "r.Get(\"/api/chat/pending-tasks/has-any\", h.HasPendingChatTasks)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/chat.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/chat.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat.go:1564): has_pending. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "HasPendingChatTasks"
     },
@@ -4852,7 +4852,7 @@
       "registration": "r.Get(\"/api/chat/pinned-agents\", h.ListChatPinnedAgents)",
       "implementation_scope": "include",
       "query_fields": "Not inferred; inspect linked handler source",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat_pinned_agent.go:40): agent_id, position. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListChatPinnedAgents"
     },
@@ -4863,7 +4863,7 @@
       "registration": "r.Post(\"/api/chat/pinned-agents\", h.PinChatAgent)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/chat_pinned_agent.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Inspect linked handler source",
+      "request_body": "Source-observed JSON fields (server/internal/handler/chat_pinned_agent.go:73): agent_id, position. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "PinChatAgent"
     },
@@ -4895,7 +4895,7 @@
       "line": 2436,
       "registration": "r.Get(\"/api/chat/thread\", h.GetChatThread)",
       "implementation_scope": "include",
-      "query_fields": "Handler server/internal/handler/chat_history.go: query keys observed id",
+      "query_fields": "Source-observed query keys (server/internal/handler/chat_history.go:202): id. Delegated helpers may accept additional keys.",
       "request_body": "Handler server/internal/handler/chat_history.go: request contract may use a referenced type; forward REST JSON unchanged",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetChatThread"
@@ -4928,8 +4928,8 @@
       "line": 2445,
       "registration": "r.Get(\"/archived/page\", h.ListArchivedInboxPage)",
       "implementation_scope": "include",
-      "query_fields": "Handler literal Get/Has keys observed: cursor, group_id, limit (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
-      "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
+      "query_fields": "Source-observed query keys (server/internal/handler/inbox_archive.go:91): cursor, group_id, limit. Delegated helpers may accept additional keys.",
+      "request_body": "Source-observed JSON fields (server/internal/handler/inbox_archive.go:91): has_more, id, items, next_cursor, scope, time. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListArchivedInboxPage"
     },
@@ -4940,7 +4940,7 @@
       "registration": "r.Get(\"/archived/facets\", h.GetArchivedInboxFacets)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/inbox_archive.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/inbox_archive.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/inbox_archive.go:174): actors, priorities, statuses, unread_count. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetArchivedInboxFacets"
     },
@@ -4962,7 +4962,7 @@
       "registration": "r.Get(\"/unread-summary\", h.UnreadInboxSummary)",
       "implementation_scope": "include",
       "query_fields": "Handler server/internal/handler/inbox.go: query keys observed none directly; delegated helpers may accept additional keys",
-      "request_body": "Handler server/internal/handler/inbox.go: request contract may use a referenced type; forward REST JSON unchanged",
+      "request_body": "Source-observed JSON fields (server/internal/handler/inbox.go:388): count, workspace_id. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UnreadInboxSummary"
     },
