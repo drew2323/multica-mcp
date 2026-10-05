@@ -29,7 +29,7 @@ func registerRESTTools(server *mcp.Server, client *multica.Client, readOnly bool
 		if readOnly && e.Method != http.MethodGet && e.Method != http.MethodHead {
 			continue
 		}
-		tool := &mcp.Tool{Name: e.Name, Description: fmt.Sprintf("%s %s. Supply path_params, query, body, and optional workspace_id.", e.Method, e.Path), InputSchema: map[string]any{"type": "object", "properties": map[string]any{
+		tool := &mcp.Tool{Name: e.Name, Description: restToolDescription(e), InputSchema: map[string]any{"type": "object", "properties": map[string]any{
 			"path_params":  map[string]any{"type": "object", "additionalProperties": map[string]any{"type": "string"}, "description": "Values for the named {placeholders} in the route path."},
 			"query":        map[string]any{"type": "object", "additionalProperties": map[string]any{"oneOf": []any{map[string]any{"type": "string"}, map[string]any{"type": "array", "items": map[string]any{"type": "string"}}}}, "description": "REST query parameters; values may be strings or arrays for repeated parameters."},
 			"body":         map[string]any{"type": "object", "additionalProperties": true, "description": "REST JSON request body, forwarded without projection."},
@@ -98,4 +98,15 @@ func expandPath(path string, params map[string]string) (string, error) {
 		path = strings.Replace(path, path[start:end+1], url.PathEscape(value), 1)
 	}
 	return path, nil
+}
+
+func restToolDescription(e Endpoint) string {
+	base := fmt.Sprintf("%s %s. Supply path_params, query, body, and optional workspace_id.", e.Method, e.Path)
+	if e.Description != "" {
+		return base + " " + e.Description
+	}
+	if e.Query != "" || e.Body != "" {
+		return base + " Query: " + e.Query + " Request body: " + e.Body
+	}
+	return base
 }

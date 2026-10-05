@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/strider2038/multica-mcp/internal/multica"
@@ -50,5 +51,69 @@ func TestExpandPathEscapesExactlyOnce(t *testing.T) {
 	}
 	if got != "/api/issues/a%20b%252Fc" {
 		t.Fatalf("path = %q", got)
+	}
+}
+
+func TestEndpointCatalogCoverageAndInputDocumentation(t *testing.T) {
+	endpoints, err := LoadEndpoints()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := ValidateEndpoints(endpoints); err != nil {
+		t.Fatal(err)
+	}
+	byHandler := make(map[string]Endpoint, len(endpoints))
+	for _, e := range endpoints {
+		byHandler[e.Handler] = e
+	}
+	required := []string{
+		"GetWorkspace", "ListMembersWithUser", "SearchProjects", "ListProjects", "CreateProject", "UpdateProject", "DeleteProject",
+		"SearchIssues", "ListIssues", "QueryIssues", "CreateIssue", "GetIssue", "UpdateIssue", "ListChildIssues", "ListTasksByIssue",
+		"CreateComment", "ListComments", "ListTimeline", "ListIssueSubscribers", "SubscribeToIssue", "UnsubscribeFromIssue",
+		"ListAgents", "GetAgent", "ListAgentTasks", "ListAutopilots", "CreateAutopilot", "UpdateAutopilot", "TriggerAutopilot", "ListAutopilotRuns", "GetAutopilotRun",
+	}
+	for _, name := range required {
+		if _, ok := byHandler[name]; !ok {
+			t.Errorf("required endpoint handler %s missing", name)
+		}
+	}
+	for _, name := range required {
+		e := byHandler[name]
+		if strings.Contains(e.Query, "Not inferred") || strings.Contains(e.Body, "Inspect linked") {
+			t.Errorf("%s has placeholder input docs", name)
+		}
+	}
+	for _, e := range endpoints {
+		if strings.HasPrefix(e.Path, "/api/daemon/") {
+			t.Errorf("daemon endpoint exposed: %s %s", e.Method, e.Path)
+		}
+		if len(e.Name) > 64 {
+			t.Errorf("tool name too long (%d): %s", len(e.Name), e.Name)
+		}
+	}
+	// Catalog runtime entries must be fully categorized, and only included
+	// safe user-facing JSON endpoints may register as tools.
+	var catalog struct { Endpoints []Endpoint `json:"endpoints"` }
+	if err := json.Unmarshal(catalogJSON, &catalog); err != nil { t.Fatal(err) }
+	included := 0
+	for _, e := range catalog.Endpoints {
+		if e.Scope == "include" { included++ } else if strings.TrimSpace(e.Reason) == "" {
+			t.Errorf("excluded route has no reason: %s %s", e.Method, e.Path)
+		}
+	}
+	if included < len(endpoints) {
+		t.Errorf("effective tools %d exceed included catalog entries %d", len(endpoints), included)
+	} else if included-len(endpoints) != 0 {
+		t.Errorf("included catalog entries %d but effective tools %d", included, len(endpoints))
+	}
+}
+
+func TestRESTToolDescriptionIncludesCatalogInputs(t *testing.T) {
+	e := Endpoint{Method: http.MethodPost, Path: "/api/issues/query", Query: "Same filters", Body: "JSON filter object"}
+	got := restToolDescription(e)
+	for _, want := range []string{"Same filters", "JSON filter object", "path_params", "workspace_id"} {
+		if !strings.Contains(got, want) {
+			t.Errorf("description %q missing %q", got, want)
+		}
 	}
 }

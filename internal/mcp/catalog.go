@@ -2,10 +2,10 @@ package mcp
 
 import (
 	"crypto/sha1"
+	_ "embed"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	_ "embed"
 	"strings"
 )
 
@@ -13,14 +13,15 @@ import (
 var catalogJSON []byte
 
 type Endpoint struct {
-	Method  string `json:"method"`
-	Path    string `json:"path"`
-	Scope   string `json:"implementation_scope"`
-	Name    string `json:"tool_name,omitempty"`
-	Handler string `json:"handler,omitempty"`
-	Query   string `json:"query_fields,omitempty"`
-	Body    string `json:"request_body,omitempty"`
-	Reason  string `json:"scope_reason,omitempty"`
+	Method      string `json:"method"`
+	Path        string `json:"path"`
+	Scope       string `json:"implementation_scope"`
+	Name        string `json:"tool_name,omitempty"`
+	Handler     string `json:"handler,omitempty"`
+	Query       string `json:"query_fields,omitempty"`
+	Body        string `json:"request_body,omitempty"`
+	Reason      string `json:"scope_reason,omitempty"`
+	Description string `json:"description,omitempty"`
 }
 
 func LoadEndpoints() ([]Endpoint, error) {
@@ -48,7 +49,11 @@ func LoadEndpoints() ([]Endpoint, error) {
 		e.Name = "multica_" + strings.ToLower(e.Method) + "_" + normalized
 		// Duplicated route declarations and path shapes can otherwise collide after normalization.
 		h := sha1.Sum([]byte(e.Method + " " + e.Path))
-		e.Name += "_" + hex.EncodeToString(h[:3])
+		suffix := "_" + hex.EncodeToString(h[:3])
+		e.Name += suffix
+		if len(e.Name) > 64 {
+			e.Name = strings.TrimRight(e.Name[:64-len(suffix)], "_") + suffix
+		}
 		out = append(out, e)
 	}
 	return out, nil
@@ -56,16 +61,17 @@ func LoadEndpoints() ([]Endpoint, error) {
 func normalizeRoute(path string) string {
 	path = strings.ReplaceAll(path, "//", "/")
 	path = strings.TrimSuffix(path, "/")
-	if path == "" { return "/" }
+	if path == "" {
+		return "/"
+	}
 	return path
 }
 
 func safeEndpoint(e Endpoint) bool {
-	p := strings.ToLower(e.Path + " " + e.Handler)
-	for _, denied := range []string{"webhook", "token", "secret", "rotate", "signing", "mcp-server", "plugin", "runtime-profile", "share-link", "invitation", "github", "vcs/", "wakeups", "quick-actions", "cancel", "rerun", "trigger-preview", "preview-trigger", "replay", "deliveries", "reaction", "squad-evaluated", "system-wakeup", "archive", "restore", "env"} {
-		if strings.Contains(p, denied) { return false }
-	}
-	return true
+	// Catalog scope is the reviewed boundary. Do not apply broad path-word
+	// filters here: user-visible REST routes may legitimately include these
+	// terms. Security-sensitive routes must be explicitly excluded in catalog.
+	return e.Scope == "include"
 }
 
 func ValidateEndpoints(es []Endpoint) error {

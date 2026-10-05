@@ -1,32 +1,21 @@
-# REST API coverage requirements
+# REST API catalog coverage
 
-## Source and boundary
+## Source and scope
 
-Inventory source is deployed Multica server commit `d021e1bde60000399e02a3bc9144aa3499766538`, primarily `server/cmd/server/router.go`. The machine-readable catalog enumerates registered route declarations and source line numbers. Routes outside the feature boundary remain cataloged as exclusions; this MCP server must be a thin REST mapping only (no CLI, workflow, planning, fallback, or orchestration behavior).
+Source inventory: deployed Multica server commit `d021e1bde60000399e02a3bc9144aa3499766538`, router source `server/cmd/server/router.go`. Inventory is 447 statically registered route declarations; this is **not** a count of all runtime routes because dynamic mounts are not expanded. `internal/mcp/rest-api-catalog.json` is the canonical embedded catalog; `docs/rest-api-catalog.json` is the generated documentation mirror. `implementation_scope` is the runtime allowlist. Runtime tool names derive from method+path and a short route hash.
 
-## Required implementation families
+Current static inventory: **365 included, 82 excluded, 447 registered declarations**. The runtime count is the effective `LoadEndpoints()` set after explicit catalog scope and route validation, not a claim that all API capabilities are represented. Dynamic mounts are outside these totals.
 
-- Workspace discovery/detail/members: list, create (if applicable), detail, member list and mutation routes. Workspace selection/override must be per tool call, not sticky process state.
-- Projects: search/list/detail/create/update/delete.
-- Issues: list/search/query, detail, create/update/delete, status transition (using actual status endpoints), assignment fields, children/parent queries.
-- Comments: issue comments list/create; threaded comment reply/detail/edit/delete and thread operations as supported by registered routes.
-- Subscribers: list, subscribe, unsubscribe (including subtree if needed by API contract).
-- Agents: list/detail/tasks; include task run/history and user-visible task messages.
-- Issue execution/history: issue task-runs/timeline and associated run/message routes that are needed for retrieval.
-- Autopilots: list/detail/create/update/delete, trigger, runs and run detail; related trigger CRUD when needed by supported contract.
+## Inclusion policy
 
-The endpoint catalog `implementation_scope` marks coarse boundary matches. Fine-grained allowlist should be reviewed by the implementer against this family list; adjacent routes (for example wakeups, reactions, labels, operational controls, billing, plugins) are not implicitly required merely because they share a path prefix.
+Expose user-visible REST routes as direct method/path calls; do not implement workflows or orchestration. Exclude credentials and auth/session management; token/signing-secret operations; incoming webhooks and OAuth callbacks; WebSocket/stream transports; binary upload/download/avatar serving; health/diagnostic routes; non-`/api/` routes; and explicitly marked internal surfaces. The exact excluded declarations, handler references, and per-route reason are in the canonical catalog (`implementation_scope: exclude`, `scope_reason`). Exclusions are explicit; runtime no longer silently filters routes by broad path-word heuristics. Review catalog security exclusions before expanding scope.
 
-## Mapping/verification rules
+## Request schemas and limits
 
-1. Use the deployed REST handlers as source of truth for path, HTTP method, query names, JSON fields, response envelope, pagination, and permission checks. The catalog preserves handler names and router line references; `query_fields`/`request_body` intentionally remain handler-inspection requirements rather than guesses.
-2. Preserve Multica identifiers, nullable fields, enums, and error semantics. Do not invent aliases or translate into workflows.
-3. Expose workspace override explicitly per call (header/query/tool argument according to source handler contract); default to authenticated user's selected workspace only when the REST client contract permits it. Never mutate global client workspace state.
-4. Keep writes explicit and one-to-one with REST operations. No automatic retries of non-idempotent requests unless server idempotency is verified.
-5. Do not include credential-bearing, webhook, daemon/runtime callback, health/metrics/profiling, static asset, or internal transport routes in general MCP tools. Their exclusions remain in catalog.
-6. Implement authorization failures and route-level role restrictions as server responses; do not emulate privileges client-side.
-7. Test each included method/path with mocked HTTP transport: request serialization, query encoding, workspace override isolation, response parsing, and error propagation. No live writes are part of this inventory task.
+For handlers with verified notes, `query_fields` and `request_body` record inspected field names/behavior. For the remaining included handlers, the catalog still contains legacy `Not inferred` / `Inspect linked handler source` notes: these are **unresolved documentation exceptions**, not schema claims. The source checkout cited above was not present in this workspace, so automated extraction of `URL.Query`/`Get` reads and request-struct JSON tags could not be performed reliably. MCP `body` remains an unprojected generic JSON object and does not enforce endpoint-specific validation. Source handler names and route references are retained in each catalog record to enable reproducible follow-up when source is available.
 
-## Inventory status
+Tool-name length is tested against MCP's 64-character limit. There are no claims here that all response schemas, permissions, pagination, or body field types have been fully modeled; calls forward raw JSON and return the server response intact.
 
-Generated from registered route literals. Exact request-field and permission documentation requires per-handler source inspection before coding; do not treat uninspected schema notes as verified. See catalog for complete endpoint inventory and inclusion/exclusion reasons.
+## Verification
+
+`go test ./...` validates the effective catalog, required route families, documented required schemas, protected-route exclusions, response pass-through, and REST request handling. Candidate binary build is required before commit. No production configuration or service is touched.
