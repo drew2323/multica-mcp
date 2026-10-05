@@ -44,6 +44,63 @@ func (c *Client) SetWorkspaceScope(id, slug string) {
 	c.workspaceSlug = slug
 }
 
+// REST forwards a catalogued JSON API request without projecting its response.
+// Workspace overrides are request-local; the configured scope is never mutated.
+func (c *Client) REST(ctx context.Context, method, path string, query map[string]string, body json.RawMessage, workspaceID string) (json.RawMessage, error) {
+	u, err := url.Parse(c.baseURL + path)
+	if err != nil {
+		return nil, fmt.Errorf("parse REST URL: %w", err)
+	}
+	values := u.Query()
+	for k, v := range query {
+		values.Set(k, v)
+	}
+	u.RawQuery = values.Encode()
+	var reader io.Reader
+	if len(body) > 0 {
+		reader = bytes.NewReader(body)
+	}
+	req, err := http.NewRequestWithContext(ctx, method, u.String(), reader)
+	if err != nil {
+		return nil, fmt.Errorf("create REST request: %w", err)
+	}
+	req.Header.Set("Authorization", "Bearer "+c.token)
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("X-Client-Platform", "mcp")
+	if len(body) > 0 {
+		req.Header.Set("Content-Type", "application/json")
+	}
+	if c.clientVersion != "" {
+		req.Header.Set("X-Client-Version", c.clientVersion)
+	}
+	if workspaceID != "" {
+		req.Header.Set("X-Workspace-ID", workspaceID)
+	} else if c.workspaceSlug != "" {
+		req.Header.Set("X-Workspace-Slug", c.workspaceSlug)
+	} else if c.workspaceID != "" {
+		req.Header.Set("X-Workspace-ID", c.workspaceID)
+	}
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("execute REST request: %w", err)
+	}
+	defer resp.Body.Close()
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("read REST response: %w", err)
+	}
+	if resp.StatusCode >= 400 {
+		return nil, &apiError{StatusCode: resp.StatusCode, Message: parseAPIErrorMessage(data)}
+	}
+	if len(data) == 0 {
+		return json.RawMessage("null"), nil
+	}
+	if !json.Valid(data) {
+		return nil, fmt.Errorf("decode REST response: invalid JSON")
+	}
+	return json.RawMessage(data), nil
+}
+
 func (c *Client) workspaceAttrs() []any {
 	if c.workspaceSlug != "" {
 		return []any{"workspace_slug", c.workspaceSlug}
