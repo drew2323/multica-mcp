@@ -16,6 +16,8 @@ type Config struct {
 	HTTPPort             int
 	ReadOnly             bool
 	MCPAPIKey            string
+	RESTDomains          string
+	RESTProfile          string
 }
 
 func Load() (*Config, error) {
@@ -51,6 +53,8 @@ func Load() (*Config, error) {
 		HTTPPort:             httpPort,
 		ReadOnly:             readOnly,
 		MCPAPIKey:            apiKey,
+		RESTDomains:          getEnv("MULTICA_MCP_DOMAINS", ""),
+		RESTProfile:          getEnv("MULTICA_MCP_PROFILE", "core"),
 	}, nil
 }
 

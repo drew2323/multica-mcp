@@ -1,349 +1,114 @@
-# multica-mcp
+# Multica REST MCP
 
-MCP server for [Multica](https://multica.ai) — the open-source managed agents platform. Allows local coding agents (Cursor, Claude Code, OpenCode, Codex, etc.) to interact with Multica projects, tasks, comments, and agents via the Model Context Protocol.
+A thin REST-only MCP server maintained in [drew2323/multica-mcp](https://github.com/drew2323/multica-mcp), derived from [strider2038/multica-mcp](https://github.com/strider2038/multica-mcp). Original license and attribution retained. The Go module path still uses the upstream namespace; this is not an upstream release.
 
-Targets **Multica REST API v0.3.31**.
+## Project status
 
-## Features
+The default `main` branch contains this REST-only implementation, used in our private ChatGPT integration. This is an independently maintained fork, not an upstream release. Exhaustive endpoint schemas and live coverage remain incomplete; limitations are documented below. Build from this repository: upstream releases and upstream `go install ...@latest` do not provide these capabilities. No new fork release binary is claimed.
 
-- **15 MCP tools** for full Multica integration: list projects, create/update tasks, add comments, search, plan breakdowns, etc.
-- **stdio and HTTP transports** — connect via CLI pipe or HTTP endpoint
-- **Read-only mode** — safe deployment where write tools are disabled
-- **Dry-run support** — validate create/update operations without side effects
-- **Status validation** — rejects invalid task status transitions
-- **Auto workspace detection** — uses the only workspace if you have one
+## Behavior
 
-## Quick Start
+- One catalog tool per REST method/path; arbitrary JSON body/query, repeated query values and request-local workspace override. Two explicit attachment transport tools provide bounded content read and multipart upload.
+- Custom statuses are backend-authoritative: no hardcoded enum.
+- No CLI calls, planning, fallback orchestration or composite workflows in registered tools.
+- Embedded catalog, independent of working directory.
+- Read-only mode removes mutating tools.
+- 319 included endpoints; explicit exclusions for plugin authentication, internal callbacks, secrets and unsuitable transports. Not 100% API coverage.
 
-### Install with Go
+See [endpoint catalog](docs/rest-api-catalog.json), [coverage limitations](docs/rest-api-coverage.md), [attachment content tools](docs/attachment-content-tools.md) and [domains/profiles](docs/tool-domains.md). Some input descriptions remain incomplete; raw JSON passthrough is not a complete schema.
 
-Requires Go 1.25+ and a `GOBIN` on your `PATH` (often `~/go/bin`):
+## What it provides today
 
-```bash
-go install github.com/strider2038/multica-mcp@latest
+- **Workspaces:** list/detail/member discovery; no implicit workspace administration in core.
+- **Projects:** search, list, detail and CRUD; project resources in specialized profiles.
+- **Issues:** search/list/detail/create/update/delete, assignment and arbitrary custom statuses through native update fields, hierarchy/children and general issue timeline.
+- **Comments:** threaded create/read/update/delete and resolve operations.
+- **Labels:** read available definitions and issue labels; add/remove issue labels in core. Definition mutations are not in core.
+- **Properties:** read typed definitions and issue values, set/clear issue values and metadata. Definition mutations are not in core.
+- **Followers:** list subscribers in core. Subscribe/unsubscribe are specialized because native REST also permits targeting other users.
+- **Attachments:** list/detail, read text-previewable content, upload files to issues/comments. Markdown supplementary requirements can be read and written directly. No attachment deletion in core, no image interpretation or PDF text extraction.
+- **Specialized profiles:** agent/execution history, autopilots, integrations, runtimes, plugins, notifications, views and configuration endpoints. Presence in the catalog is not a claim of exhaustive live validation.
+
+### Attachment tools
+
+- `multica_attachment_read_content`: authenticated server text-preview endpoint, maximum 2 MiB; returns `content`, `encoding`, `content_type`, `size_bytes`.
+- `multica_attachment_upload`: multipart upload, maximum 8 MiB locally; supply `filename`, exactly one of `content` / `content_base64`, and an issue/comment target. `.md` defaults to `text/markdown`. No host filesystem reads.
+
+Example upload arguments:
+
+```json
+{"filename":"requirements.md","content":"# Additional requirements\nKeep custom statuses intact.\n","issue_id":"<issue-id>"}
 ```
 
-The binary is installed as **`multica-mcp`**. Use `$(go env GOPATH)/bin/multica-mcp` or ensure `GOBIN` is on your `PATH`.
+Use the attachment ID in the upload response for `multica_attachment_read_content`:
 
-### Install a release binary
-
-Download the archive for your OS and CPU from the [GitHub releases](https://github.com/strider2038/multica-mcp/releases) page:
-
-- Linux x86_64: `multica-mcp-linux-amd64.tar.gz`
-- Linux ARM64: `multica-mcp-linux-arm64.tar.gz`
-- macOS Intel: `multica-mcp-darwin-amd64.tar.gz`
-- macOS Apple Silicon: `multica-mcp-darwin-arm64.tar.gz`
-- Windows x86_64: `multica-mcp-windows-amd64.zip`
-- Windows ARM64: `multica-mcp-windows-arm64.zip`
-
-Linux/macOS example:
-
-```bash
-tar -xzf multica-mcp-linux-amd64.tar.gz
-chmod +x multica-mcp-linux-amd64
-sudo mv multica-mcp-linux-amd64 /usr/local/bin/multica-mcp
+```json
+{"attachment_id":"<attachment-id>"}
 ```
 
-Windows PowerShell example:
+## Build
 
-```powershell
-Expand-Archive .\multica-mcp-windows-amd64.zip .
-Move-Item .\multica-mcp-windows-amd64.exe $env:USERPROFILE\bin\multica-mcp.exe
-```
-
-Use the installed path in your MCP client configuration, for example `/usr/local/bin/multica-mcp` on Linux/macOS.
-
-### Build from source
+Go 1.25+:
 
 ```bash
-make build
-```
-
-### Configure
-
-```bash
-export MULTICA_BASE_URL=https://multica.ai   # or your self-hosted Multica URL
-export MULTICA_TOKEN=mul_your_token_here       # required: PAT from Multica settings
-
-# Workspace (pick one strategy — see Configuration below)
-# export MULTICA_WORKSPACE_ID=550e8400-e29b-41d4-a716-446655440000
-# export MULTICA_WORKSPACE_SLUG=my-team
-
-export MCP_TRANSPORT=stdio                    # stdio (default) or http
-export LOG_LEVEL=info                          # debug, info, warn, error
-```
-
-### Run
-
-```bash
-# stdio mode (for agent integration)
-./bin/multica-mcp
-
-# HTTP mode
-MCP_TRANSPORT=http ./bin/multica-mcp
+git clone https://github.com/drew2323/multica-mcp.git
+cd multica-mcp
+go test -race ./...
+go build -o bin/multica-mcp .
 ```
 
 ## Configuration
 
-Environment variables are read at process startup (`internal/config`). The Multica HTTP client sends `X-Workspace-ID` or `X-Workspace-Slug` on workspace-scoped routes (see `internal/multica/client.go`).
+Read at process startup. Protect credentials outside Git and service unit text.
 
-### Environment variables
+- `MULTICA_BASE_URL`: required, actual Multica origin.
+- `MULTICA_TOKEN`: required user credential.
+- `MULTICA_WORKSPACE_ID` / `MULTICA_WORKSPACE_SLUG`: workspace; slug takes precedence. Unset can resolve a single workspace; multiple workspaces require a choice.
+- `MULTICA_MCP_PROFILE`: core (default), delivery, automation, admin, all.
+- `MULTICA_MCP_DOMAINS`: explicit comma-separated domains overriding profile selection; unknown selections fail startup.
+- `MULTICA_READ_ONLY`: default false; true removes non-GET/HEAD tools.
+- `MCP_TRANSPORT`: stdio (default), or legacy http.
+- `LOG_LEVEL`: info (default).
 
-| Variable | Required | Default | Description |
-| -------- | -------- | ------- | ----------- |
-| `MULTICA_BASE_URL` | **Yes** | — | Base URL of your Multica instance (e.g. `https://multica.ai` or self-hosted origin). |
-| `MULTICA_TOKEN` | **Yes** | — | Personal access token (PAT), usually prefixed with `mul_`. |
-| `MULTICA_WORKSPACE_ID` | No† | auto | Workspace UUID. If unset and your account has **exactly one** workspace, its ID is detected automatically. Ignored for API headers when `MULTICA_WORKSPACE_SLUG` is set. |
-| `MULTICA_WORKSPACE_SLUG` | No† | — | Workspace slug (human-readable id, e.g. `acme-backend`). Sent as `X-Workspace-Slug`. If set (non-empty after trim), it **takes precedence** over `MULTICA_WORKSPACE_ID`. |
-| `MCP_TRANSPORT` | No | `stdio` | `stdio` (pipe to the IDE/agent) or `http` (standalone MCP HTTP server). |
-| `MCP_HTTP_PORT` | No | `8080` | Listen port when `MCP_TRANSPORT=http`. |
-| `MCP_API_KEY` | No | — | When set, HTTP transport requires `Authorization: Bearer <key>` on MCP requests. Recommended for exposed HTTP deployments. |
-| `LOG_LEVEL` | No | `info` | `debug`, `info`, `warn`, `error` (structured logs via `slog`). |
-| `MULTICA_READ_ONLY` | No | `false` | If `true`, write MCP tools return an error without calling the Multica API. |
+Write-enabled profiles: **core 45 / delivery 128 / automation 70 / admin 102 / all 321**. Exact membership in [tool-domains.md](docs/tool-domains.md). Core includes issue search/children/timeline and status discovery, includes subscriber read and excludes status administration. Profiles filter discovery, not credential authorization. Read-only mode and workspace permissions are separate.
 
-† **Workspace:** You must end up with a resolvable workspace: either auto-detection (single workspace), or set **`MULTICA_WORKSPACE_ID`** or **`MULTICA_WORKSPACE_SLUG`**. If your account has **multiple** workspaces and neither variable is set, the server exits and prints the available workspaces — then set one of the two variables.
+For local stdio clients, configure your server command's environment, e.g. `MULTICA_MCP_PROFILE=core`. Use an absolute binary path and your client's protected credential mechanism. MCP arguments are `path_params`, `query`, `body` and optional `workspace_id`; obtain exact names and schemas via `tools/list`, not legacy task-tool examples.
 
-## MCP Tools
+## ChatGPT and private servers
 
-### Read Operations
+Our deployment: `ChatGPT → OpenAI Secure MCP Tunnel → tunnel-client → stdio server → existing Multica API`.
 
+**The profile is configured on the host**, in the launched MCP process environment. ChatGPT cannot launch local stdio and has no profile dropdown for this server. Prompts and URL parameters do not switch profiles. Restart after changing host configuration, then refresh the client tool catalog.
 
-| Tool                          | Description                                                |
-| ----------------------------- | ---------------------------------------------------------- |
-| `multica_list_projects`       | List projects (optional name filter)                       |
-| `multica_get_project`         | Get project details                                        |
-| `multica_list_tasks`          | List tasks with filters (project, status, assignee, query) |
-| `multica_get_task`            | Get task with comments and subtasks                        |
-| `multica_search_tasks`        | Full-text search across titles, descriptions, comments     |
-| `multica_list_agents`         | List workspace agents                                      |
-| `multica_plan_task_breakdown` | Generate a subtask plan (no tasks created)                 |
+Concurrent profiles require separate configured processes/connections and remote registrations; not automatically provisioned. ChatGPT action controls can further restrict tools, but do not change the server profile.
 
+Current [OpenAI instructions](https://help.openai.com/en/articles/12584461-developer-mode-and-mcp-apps-in-chatgpt):
 
-### Write Operations (disabled in read-only mode)
+- Enterprise/Edu: Workspace settings → Apps → app menu → Action control → Refresh. Review/enable new actions (disabled by default).
+- Business published apps: recreate and republish to change tools/metadata.
+- New app: Scan Tools before creation, then select it in a new chat.
 
+UI/plan capabilities may change. Preserve the existing tunnel endpoint and authentication. No public Multica exposure is needed. Legacy HTTP (`MCP_HTTP_PORT` default 8080, optional `MCP_API_KEY`) is not our private deployment; review binding/network/auth before using it.
 
-| Tool                                | Description                          |
-| ----------------------------------- | ------------------------------------ |
-| `multica_create_task`               | Create a task                        |
-| `multica_create_subtask`            | Create a subtask under a parent task |
-| `multica_update_task`               | Update task fields                   |
-| `multica_add_comment`               | Add a comment to a task              |
-| `multica_assign_task`               | Assign task to member or agent       |
-| `multica_create_task_with_subtasks` | Create parent + subtasks atomically  |
+## Verification and remaining limits
 
+Verified:
 
-### Task Statuses
+- `go test -race ./...`, build and actual stdio tools/list for all five profiles/counts above.
+- Live MCP reads: workspace/members, projects, issues, statuses, agents, autopilots.
+- Disposable unassigned issue create/read and `ingested → todo → ingested` transitions.
+- Children/comments/subscribers/task-run reads; threaded comment create/update/delete.
+- Cleanup independently confirmed by HTTP 404.
+- Installed binary matches candidate; deployed launcher tools/list 45 and custom status discovery passed. Service active/enabled; tunnel readiness healthy.
 
-`backlog`, `todo`, `in_progress`, `in_review`, `done`, `blocked`, `cancelled`
+Maintainer confirmed the refreshed ChatGPT connection works after deployment. Live Markdown upload/read was separately verified through the deployed MCP launcher with exact Czech text agreement, followed by attachment and issue cleanup (404).
 
-### Priorities
-
-`none`, `urgent`, `high`, `medium`, `low`
-
-## API Examples
-
-### List projects
-
-```json
-{"query": "backend"}
-```
-
-Response:
-
-```json
-[
-  {"id": "p1", "title": "Backend API", "status": "active", "issue_count": 12}
-]
-```
-
-### Create a task
-
-```json
-{
-  "project_id": "p1",
-  "title": "Add pagination to list endpoint",
-  "description": "Implement cursor-based pagination for the issues list endpoint.",
-  "priority": "medium",
-  "assignee": "agent-uuid-here",
-  "assignee_type": "agent"
-}
-```
-
-### Search tasks
-
-```json
-{"query": "pagination", "status": "in_progress", "limit": 10}
-```
-
-### Plan task breakdown
-
-```json
-{
-  "title": "Implement user authentication",
-  "description": "Add OAuth2 login with Google and GitHub providers",
-  "project_context": "This is a Go backend with Chi router"
-}
-```
-
-## Agent configuration
-
-Use the same environment variables as in the table above. Prefer an **absolute path** to `multica-mcp` in `command` (from `go install` or `make build`).
-
-### Cursor
-
-1. **Project MCP:** add `.cursor/mcp.json` in the project root, **or** user-level config (often `~/.cursor/mcp.json` on Linux/macOS — depends on Cursor version). You can also use **Cursor Settings → MCP** to register the server in the UI.
-2. Set `command` to the full path of your binary (`go install` → `$(go env GOPATH)/bin/multica-mcp`, or `make build` → `bin/multica-mcp` in this repo).
-3. Reload MCP servers after editing (Command Palette: “MCP: Restart” / restart Cursor).
-
-Example **`.cursor/mcp.json`** (workspace by **slug**; swap for `MULTICA_WORKSPACE_ID` if you prefer UUID):
-
-```json
-{
-  "mcpServers": {
-    "multica": {
-      "command": "/absolute/path/to/multica-mcp/bin/multica-mcp",
-      "env": {
-        "MULTICA_BASE_URL": "https://multica.ai",
-        "MULTICA_TOKEN": "mul_your_personal_access_token",
-        "MULTICA_WORKSPACE_SLUG": "my-workspace-slug",
-        "MCP_TRANSPORT": "stdio",
-        "LOG_LEVEL": "info"
-      }
-    }
-  }
-}
-```
-
-Example with **workspace UUID** instead of slug (do not set both unless you intend slug to win):
-
-```json
-{
-  "mcpServers": {
-    "multica": {
-      "command": "/absolute/path/to/multica-mcp/bin/multica-mcp",
-      "env": {
-        "MULTICA_BASE_URL": "https://multica.ai",
-        "MULTICA_TOKEN": "mul_your_personal_access_token",
-        "MULTICA_WORKSPACE_ID": "550e8400-e29b-41d4-a716-446655440000",
-        "MULTICA_READ_ONLY": "false"
-      }
-    }
-  }
-}
-```
-
-Optional extras you can add under `env`: `MULTICA_READ_ONLY=true`, `LOG_LEVEL=debug`, or (for HTTP mode) `MCP_TRANSPORT=http`, `MCP_HTTP_PORT=8080`, `MCP_API_KEY=...`.
-
-### Claude Code (`.claude/settings.json`)
-
-```json
-{
-  "mcpServers": {
-    "multica": {
-      "command": "/path/to/multica-mcp",
-      "env": {
-        "MULTICA_BASE_URL": "https://multica.ai",
-        "MULTICA_TOKEN": "mul_your_token",
-        "MULTICA_WORKSPACE_ID": "550e8400-e29b-41d4-a716-446655440000"
-      }
-    }
-  }
-}
-```
-
-You can replace `MULTICA_WORKSPACE_ID` with `MULTICA_WORKSPACE_SLUG` when you configure by slug.
-
-### OpenCode (`opencode.json`)
-
-```json
-{
-  "mcp": {
-    "multica": {
-      "command": "/path/to/multica-mcp",
-      "env": {
-        "MULTICA_BASE_URL": "https://multica.ai",
-        "MULTICA_TOKEN": "mul_your_token",
-        "MULTICA_WORKSPACE_SLUG": "my-workspace-slug"
-      }
-    }
-  }
-}
-```
-
-## Architecture
-
-```
-main.go                    Entry point (go install / go build)
-internal/
-  config/                  Environment configuration
-  domain/                  Domain models (Project, Task, Comment, Agent)
-  multica/                 HTTP client adapter for Multica API v0.3.31
-  app/                     Use case / business logic layer
-  mcp/                     MCP tool handlers and registration
-  version/                 Server and API version constants
-  logging/                 Structured logging (slog)
-```
-
-The architecture isolates the MCP transport layer from business logic. The `internal/multica` package is the only one that knows about HTTP endpoints — if the Multica API changes, only that package needs updating.
-
-Agent contributors: see [AGENTS.md](AGENTS.md) for versioning, changelog, and release workflow.
-
-## Self-Hosted (VPS)
-
-Run as an HTTP server with API key authentication:
-
-```bash
-MCP_TRANSPORT=http \
-MCP_HTTP_PORT=8080 \
-MCP_API_KEY=your-secret-key \
-./bin/multica-mcp
-```
-
-Clients must send `Authorization: Bearer your-secret-key` with every request. Without `MCP_API_KEY`, authentication is disabled (suitable for local/stdio use only).
-
-### With reverse proxy (Caddy)
-
-```Caddyfile
-multica-mcp.example.com {
-    reverse_proxy localhost:8080
-}
-```
-
-### Connecting a remote agent
-
-Configure the agent to use the HTTP endpoint:
-
-```json
-{
-  "mcpServers": {
-    "multica": {
-      "url": "https://multica-mcp.example.com/mcp",
-      "headers": {
-        "Authorization": "Bearer your-secret-key"
-      }
-    }
-  }
-}
-```
-
-## Development
-
-See [AGENTS.md](AGENTS.md) for versioning (`VERSION`, `CHANGELOG.md`) and release rules.
-
-```bash
-make test     # run tests
-make lint     # run go vet
-make build    # build bin/multica-mcp
-```
-
-Pushes to `main` with a new `VERSION` trigger an automated GitHub release (`v0.x.y`).
-
-## Token Setup
-
-1. Go to your Multica instance → Settings → Personal Access Tokens
-2. Create a new token (starts with `mul_`)
-3. Copy the token — it's shown only once
+Not verified: every endpoint live, agent assignment/autopilot trigger (avoided starting work), reboot via actual reboot. Tool names changed: refresh is required. Legacy source files remain but workflow tools are not registered.
 
 ## License
 
-See [LICENSE](LICENSE).
+See [LICENSE](LICENSE); upstream attribution retained.
+
+## Core auxiliary primitives
+
+Core adds label definition reads and issue label add/remove; property definition reads and issue metadata/property value operations; subscriber list; attachment list and metadata read. Issue property values are available in issue detail. Explicit attachment tools now read server-approved text-previewable content (2 MiB server bound; non-UTF-8 is base64) and upload multipart files for issue/comment references (8 MiB wrapper bound). No label/property schema mutations or attachment deletion. Subscribe/unsubscribe are NOT included: REST accepts a different target user, and a thin passthrough cannot promise self-only restrictions.

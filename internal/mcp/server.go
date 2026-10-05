@@ -11,6 +11,7 @@ import (
 
 	"github.com/strider2038/multica-mcp/internal/app"
 	"github.com/strider2038/multica-mcp/internal/domain"
+	"github.com/strider2038/multica-mcp/internal/multica"
 	"github.com/strider2038/multica-mcp/internal/version"
 )
 
@@ -19,39 +20,19 @@ type Server struct {
 	useCase   *app.UseCase
 }
 
-func NewServer(useCase *app.UseCase, readOnly bool) *Server {
-	s := &Server{
-		useCase: useCase,
-		mcpServer: mcp.NewServer(&mcp.Implementation{
-			Name:    "multica-mcp",
-			Version: version.Version,
-		}, nil),
+func NewServer(useCase *app.UseCase, client *multica.Client, readOnly bool, domainSelection, profile string) (*Server, error) {
+	s := &Server{useCase: useCase, mcpServer: mcp.NewServer(&mcp.Implementation{Name: "multica-mcp", Version: version.Version}, nil)}
+	endpoints, err := LoadEndpoints()
+	if err != nil {
+		return nil, err
 	}
-
-	s.registerTools(readOnly)
-	return s
-}
-
-func (s *Server) registerTools(readOnly bool) {
-	s.addTool(listProjectsTool(), s.handleListProjects)
-	s.addTool(listStatusesTool(), s.handleListStatuses)
-	s.addTool(getProjectTool(), s.handleGetProject)
-	s.addTool(listTasksTool(), s.handleListTasks)
-	s.addTool(getTaskTool(), s.handleGetTask)
-	s.addTool(searchTasksTool(), s.handleSearchTasks)
-	s.addTool(listAgentsTool(), s.handleListAgents)
-	s.addTool(planTaskBreakdownTool(), s.handlePlanTaskBreakdown)
-	s.addTool(previewCommentTriggersTool(), s.handlePreviewCommentTriggers)
-	s.addTool(previewIssueTriggersTool(), s.handlePreviewIssueTriggers)
-
-	if !readOnly {
-		s.addTool(createTaskTool(), s.handleCreateTask)
-		s.addTool(createSubtaskTool(), s.handleCreateSubtask)
-		s.addTool(updateTaskTool(), s.handleUpdateTask)
-		s.addTool(addCommentTool(), s.handleAddComment)
-		s.addTool(assignTaskTool(), s.handleAssignTask)
-		s.addTool(createTaskWithSubtasksTool(), s.handleCreateTaskWithSubtasks)
+	if err = ValidateEndpoints(endpoints); err != nil {
+		return nil, err
 	}
+	if err = registerRESTTools(s.mcpServer, client, readOnly, domainSelection, profile); err != nil {
+		return nil, err
+	}
+	return s, nil
 }
 
 func (s *Server) addTool(tool *mcp.Tool, handler mcp.ToolHandler) {
