@@ -2098,7 +2098,7 @@
       "line": 2009,
       "registration": "r.Get(\"/children\", h.ListChildrenByParents)",
       "implementation_scope": "include",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Handler literal Get/Has keys observed: parent_ids (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListChildrenByParents"
@@ -2750,7 +2750,7 @@
       "line": 2081,
       "registration": "r.Get(\"/\", h.ListQuickActions)",
       "implementation_scope": "include",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Handler literal Get/Has keys observed: include_archived (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListQuickActions"
@@ -2838,7 +2838,7 @@
       "line": 2101,
       "registration": "r.Get(\"/\", h.ListLabels)",
       "implementation_scope": "include",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Handler literal Get/Has keys observed: resource_type (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListLabels"
@@ -3460,7 +3460,7 @@
       "line": 2195,
       "registration": "r.Get(\"/api/issue-view-preferences\", h.GetIssueViewPreference)",
       "implementation_scope": "include",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Handler literal Get/Has keys observed: scope_id, scope_type (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "GetIssueViewPreference"
@@ -4193,7 +4193,7 @@
       "line": 2325,
       "registration": "r.Get(\"/\", h.ListAgentRuntimes)",
       "implementation_scope": "include",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Handler literal Get/Has keys observed: owner (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListAgentRuntimes"
@@ -4503,7 +4503,7 @@
       "line": 2373,
       "registration": "r.Post(\"/api/tasks/{taskId}/cancel\", h.CancelTaskByUser)",
       "implementation_scope": "include",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Handler literal Get/Has keys observed: chat_session_id, expected_status, queue_action (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
       "request_body": "Inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CancelTaskByUser"
@@ -4536,7 +4536,7 @@
       "line": 2379,
       "registration": "r.Get(\"/api/issue-wakeups\", h.ListWorkspaceWakeups)",
       "implementation_scope": "include",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Handler literal Get/Has keys observed: agent_id, kind, scope, search, source (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListWorkspaceWakeups"
@@ -4580,7 +4580,7 @@
       "line": 2386,
       "registration": "r.Get(\"/api/working-agents\", h.ListWorkspaceWorkingAgents)",
       "implementation_scope": "include",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Handler literal Get/Has keys observed: parent, relation, scope, type (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListWorkspaceWorkingAgents"
@@ -4928,7 +4928,7 @@
       "line": 2445,
       "registration": "r.Get(\"/archived/page\", h.ListArchivedInboxPage)",
       "implementation_scope": "include",
-      "query_fields": "Not inferred; inspect linked handler source",
+      "query_fields": "Handler literal Get/Has keys observed: cursor, group_id, limit (AST observation; verify receiver and helper/delegated inputs; requiredness/defaults not inferred).",
       "request_body": "None for GET/DELETE unless handler requires otherwise; inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "ListArchivedInboxPage"
