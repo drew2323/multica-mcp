@@ -39,7 +39,31 @@ type Result struct {
 	UnresolvedTypes []string `json:"unresolved_types"`
 }
 
-func main() {
+// decodedRequestTypes extracts the concrete targets passed to Decoder.Decode.
+// It handles inline literals, typed locals, and pointers to composite literals.
+func decodedRequestTypes(body *ast.BlockStmt) []string {
+	if body == nil { return nil }
+	vars := map[string]string{}
+	ast.Inspect(body, func(n ast.Node) bool {
+		v, ok := n.(*ast.ValueSpec); if !ok { return true }
+		name := ""; if len(v.Names)>0 { name=v.Names[0].Name }
+		if name!="" && v.Type!=nil { vars[name]=typeName(v.Type) }
+		if name!="" && len(v.Values)>0 { if u,ok:=v.Values[0].(*ast.UnaryExpr); ok { if c,ok:=u.X.(*ast.CompositeLit); ok { vars[name]=typeName(c.Type) } } }
+		return true
+	})
+	set:=map[string]bool{}
+	ast.Inspect(body, func(n ast.Node) bool {
+		c,ok:=n.(*ast.CallExpr); if !ok || len(c.Args)==0 { return true }
+		s,ok:=c.Fun.(*ast.SelectorExpr); if !ok || s.Sel.Name!="Decode" { return true }
+		u,ok:=c.Args[0].(*ast.UnaryExpr); if !ok { return true }
+		switch x:=u.X.(type) { case *ast.CompositeLit: set[typeName(x.Type)]=true; case *ast.Ident: set[vars[x.Name]]=true }
+		return true
+	})
+	out:=[]string{}; for n:=range set { if n!="" { out=append(out,n) } }; sort.Strings(out); return out
+}
+func typeName(e ast.Expr) string { switch x:=e.(type) { case *ast.Ident:return x.Name; case *ast.StarExpr:return typeName(x.X); case *ast.SelectorExpr:return typeName(x.Sel); case *ast.ArrayType:return typeName(x.Elt) }; return "" }
+
+func main(){
 	root := flag.String("source", "", "checkout root of source repository")
 	catalogPath := flag.String("catalog", "docs/rest-api-catalog.json", "input REST catalog")
 	out := flag.String("out", "", "write JSON report here (stdout if omitted)")
@@ -150,6 +174,7 @@ func main() {
 				}
 			}
 		}
+		for _, name := range decodedRequestTypes(info.decl.Body) { addType(name) }
 		if info.decl.Type.Params != nil {
 			for _, p := range info.decl.Type.Params.List {
 				if id, ok := p.Type.(*ast.Ident); ok {
