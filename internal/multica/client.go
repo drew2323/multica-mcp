@@ -46,14 +46,17 @@ func (c *Client) SetWorkspaceScope(id, slug string) {
 
 // REST forwards a catalogued JSON API request without projecting its response.
 // Workspace overrides are request-local; the configured scope is never mutated.
-func (c *Client) REST(ctx context.Context, method, path string, query map[string]string, body json.RawMessage, workspaceID string) (json.RawMessage, error) {
+func (c *Client) REST(ctx context.Context, method, path string, query map[string][]string, body json.RawMessage, workspaceID string) (json.RawMessage, error) {
 	u, err := url.Parse(c.baseURL + path)
 	if err != nil {
 		return nil, fmt.Errorf("parse REST URL: %w", err)
 	}
 	values := u.Query()
 	for k, v := range query {
-		values.Set(k, v)
+		values.Del(k)
+		for _, item := range v {
+			values.Add(k, item)
+		}
 	}
 	u.RawQuery = values.Encode()
 	var reader io.Reader
