@@ -5,9 +5,12 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"os"
+	_ "embed"
 	"strings"
 )
+
+//go:embed rest-api-catalog.json
+var catalogJSON []byte
 
 type Endpoint struct {
 	Method  string `json:"method"`
@@ -21,10 +24,8 @@ type Endpoint struct {
 }
 
 func LoadEndpoints() ([]Endpoint, error) {
-	b, err := os.ReadFile("docs/rest-api-catalog.json")
-	if err != nil {
-		return nil, err
-	}
+	b := catalogJSON
+	var err error
 	var catalog struct {
 		Endpoints []Endpoint `json:"endpoints"`
 	}
@@ -36,10 +37,9 @@ func LoadEndpoints() ([]Endpoint, error) {
 		if e.Scope != "include" {
 			continue
 		}
-		e.Path = strings.ReplaceAll(e.Path, "//", "/")
-		e.Path = strings.TrimSuffix(e.Path, "/")
-		if e.Path == "" {
-			e.Path = "/"
+		e.Path = normalizeRoute(e.Path)
+		if !safeEndpoint(e) {
+			continue
 		}
 		normalized := strings.TrimSuffix(strings.TrimPrefix(e.Path, "/api/"), "/")
 		normalized = strings.Trim(normalized, "/")
@@ -53,6 +53,21 @@ func LoadEndpoints() ([]Endpoint, error) {
 	}
 	return out, nil
 }
+func normalizeRoute(path string) string {
+	path = strings.ReplaceAll(path, "//", "/")
+	path = strings.TrimSuffix(path, "/")
+	if path == "" { return "/" }
+	return path
+}
+
+func safeEndpoint(e Endpoint) bool {
+	p := strings.ToLower(e.Path + " " + e.Handler)
+	for _, denied := range []string{"webhook", "token", "secret", "rotate", "signing", "mcp-server", "plugin", "runtime-profile", "share-link", "invitation", "github", "vcs/", "wakeups", "quick-actions", "cancel", "rerun", "trigger-preview", "preview-trigger", "replay", "deliveries", "reaction", "squad-evaluated", "system-wakeup", "archive", "restore", "env"} {
+		if strings.Contains(p, denied) { return false }
+	}
+	return true
+}
+
 func ValidateEndpoints(es []Endpoint) error {
 	seen := map[string]bool{}
 	for _, e := range es {
