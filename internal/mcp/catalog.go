@@ -77,7 +77,7 @@ func safeEndpoint(e Endpoint) bool {
 func ValidateEndpoints(es []Endpoint) error {
 	seen := map[string]bool{}
 	for _, e := range es {
-		if e.Method == "" || !strings.HasPrefix(e.Path, "/api/") {
+		if e.Method == "" || (!strings.HasPrefix(e.Path, "/api/") && !strings.HasPrefix(e.Path, "/v1/")) {
 			return fmt.Errorf("invalid endpoint %s %s", e.Method, e.Path)
 		}
 		if seen[e.Name] {

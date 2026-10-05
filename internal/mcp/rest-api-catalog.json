@@ -5086,12 +5086,226 @@
       "request_body": "Inspect linked handler source",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateNotificationPreferences"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/context",
+      "line": 104,
+      "registration": "registerPluginActionRoutes at publicapiv1.BasePath; handler binding in router.go:103-112",
+      "implementation_scope": "exclude",
+      "query_fields": "Not determined from router declaration; inspect handler",
+      "request_body": "Handler request contract unresolved; inspect request binding",
+      "auth": "PluginBearerOnly middleware",
+      "handler": "GetPluginContext",
+      "scope_reason": "Plugin-only authentication boundary: requires mpi_/mpc_ bearer token, not the configured user REST credential. Needs separate credential support; intentionally unavailable in this user-scoped wrapper."
+    },
+    {
+      "method": "GET",
+      "path": "/v1/issues/{issue_ref}",
+      "line": 105,
+      "registration": "registerPluginActionRoutes at publicapiv1.BasePath; handler binding in router.go:103-112",
+      "implementation_scope": "exclude",
+      "query_fields": "Not determined from router declaration; inspect handler",
+      "request_body": "Handler request contract unresolved; inspect request binding",
+      "auth": "PluginBearerOnly middleware",
+      "handler": "GetPluginIssue",
+      "scope_reason": "Plugin-only authentication boundary: requires mpi_/mpc_ bearer token, not the configured user REST credential. Needs separate credential support; intentionally unavailable in this user-scoped wrapper."
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/issues/{issue_ref}",
+      "line": 106,
+      "registration": "registerPluginActionRoutes at publicapiv1.BasePath; handler binding in router.go:103-112",
+      "implementation_scope": "exclude",
+      "query_fields": "Not determined from router declaration; inspect handler",
+      "request_body": "Handler request contract unresolved; inspect request binding",
+      "auth": "PluginBearerOnly middleware",
+      "handler": "PatchPluginIssue",
+      "scope_reason": "Plugin-only authentication boundary: requires mpi_/mpc_ bearer token, not the configured user REST credential. Needs separate credential support; intentionally unavailable in this user-scoped wrapper."
+    },
+    {
+      "method": "GET",
+      "path": "/v1/issues/{issue_ref}/comments",
+      "line": 107,
+      "registration": "registerPluginActionRoutes at publicapiv1.BasePath; handler binding in router.go:103-112",
+      "implementation_scope": "exclude",
+      "query_fields": "Not determined from router declaration; inspect handler",
+      "request_body": "Handler request contract unresolved; inspect request binding",
+      "auth": "PluginBearerOnly middleware",
+      "handler": "ListPluginComments",
+      "scope_reason": "Plugin-only authentication boundary: requires mpi_/mpc_ bearer token, not the configured user REST credential. Needs separate credential support; intentionally unavailable in this user-scoped wrapper."
+    },
+    {
+      "method": "POST",
+      "path": "/v1/issues/{issue_ref}/comments",
+      "line": 108,
+      "registration": "registerPluginActionRoutes at publicapiv1.BasePath; handler binding in router.go:103-112",
+      "implementation_scope": "exclude",
+      "query_fields": "Not determined from router declaration; inspect handler",
+      "request_body": "Handler request contract unresolved; inspect request binding",
+      "auth": "PluginBearerOnly middleware",
+      "handler": "CreatePluginComment",
+      "scope_reason": "Plugin-only authentication boundary: requires mpi_/mpc_ bearer token, not the configured user REST credential. Needs separate credential support; intentionally unavailable in this user-scoped wrapper."
+    },
+    {
+      "method": "GET",
+      "path": "/v1/storage/{scope}",
+      "line": 109,
+      "registration": "registerPluginActionRoutes at publicapiv1.BasePath; handler binding in router.go:103-112",
+      "implementation_scope": "exclude",
+      "query_fields": "Not determined from router declaration; inspect handler",
+      "request_body": "Handler request contract unresolved; inspect request binding",
+      "auth": "PluginBearerOnly middleware",
+      "handler": "ListPluginStorage",
+      "scope_reason": "Plugin-only authentication boundary: requires mpi_/mpc_ bearer token, not the configured user REST credential. Needs separate credential support; intentionally unavailable in this user-scoped wrapper."
+    },
+    {
+      "method": "GET",
+      "path": "/v1/storage/{scope}/{key}",
+      "line": 110,
+      "registration": "registerPluginActionRoutes at publicapiv1.BasePath; handler binding in router.go:103-112",
+      "implementation_scope": "exclude",
+      "query_fields": "Not determined from router declaration; inspect handler",
+      "request_body": "Handler request contract unresolved; inspect request binding",
+      "auth": "PluginBearerOnly middleware",
+      "handler": "GetPluginStorage",
+      "scope_reason": "Plugin-only authentication boundary: requires mpi_/mpc_ bearer token, not the configured user REST credential. Needs separate credential support; intentionally unavailable in this user-scoped wrapper."
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/storage/{scope}/{key}",
+      "line": 111,
+      "registration": "registerPluginActionRoutes at publicapiv1.BasePath; handler binding in router.go:103-112",
+      "implementation_scope": "exclude",
+      "query_fields": "Not determined from router declaration; inspect handler",
+      "request_body": "Handler request contract unresolved; inspect request binding",
+      "auth": "PluginBearerOnly middleware",
+      "handler": "PutPluginStorage",
+      "scope_reason": "Plugin-only authentication boundary: requires mpi_/mpc_ bearer token, not the configured user REST credential. Needs separate credential support; intentionally unavailable in this user-scoped wrapper."
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/storage/{scope}/{key}",
+      "line": 112,
+      "registration": "registerPluginActionRoutes at publicapiv1.BasePath; handler binding in router.go:103-112",
+      "implementation_scope": "exclude",
+      "query_fields": "Not determined from router declaration; inspect handler",
+      "request_body": "Handler request contract unresolved; inspect request binding",
+      "auth": "PluginBearerOnly middleware",
+      "handler": "DeletePluginStorage",
+      "scope_reason": "Plugin-only authentication boundary: requires mpi_/mpc_ bearer token, not the configured user REST credential. Needs separate credential support; intentionally unavailable in this user-scoped wrapper."
+    },
+    {
+      "method": "GET",
+      "path": "/api/plugin-bridge/v1/context",
+      "line": 104,
+      "registration": "registerPluginActionRoutes at pluginBridgePrefix",
+      "implementation_scope": "exclude",
+      "scope_reason": "Internal browser-session relay for sandboxed plugin surfaces; installation identity is carried by host-set header and workspace is derived from installation; not general REST.",
+      "handler": "GetPluginContext"
+    },
+    {
+      "method": "GET",
+      "path": "/api/plugin-bridge/v1/issues/{issue_ref}",
+      "line": 105,
+      "registration": "registerPluginActionRoutes at pluginBridgePrefix",
+      "implementation_scope": "exclude",
+      "scope_reason": "Internal browser-session relay for sandboxed plugin surfaces; installation identity is carried by host-set header and workspace is derived from installation; not general REST.",
+      "handler": "GetPluginIssue"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/plugin-bridge/v1/issues/{issue_ref}",
+      "line": 106,
+      "registration": "registerPluginActionRoutes at pluginBridgePrefix",
+      "implementation_scope": "exclude",
+      "scope_reason": "Internal browser-session relay for sandboxed plugin surfaces; installation identity is carried by host-set header and workspace is derived from installation; not general REST.",
+      "handler": "PatchPluginIssue"
+    },
+    {
+      "method": "GET",
+      "path": "/api/plugin-bridge/v1/issues/{issue_ref}/comments",
+      "line": 107,
+      "registration": "registerPluginActionRoutes at pluginBridgePrefix",
+      "implementation_scope": "exclude",
+      "scope_reason": "Internal browser-session relay for sandboxed plugin surfaces; installation identity is carried by host-set header and workspace is derived from installation; not general REST.",
+      "handler": "ListPluginComments"
+    },
+    {
+      "method": "POST",
+      "path": "/api/plugin-bridge/v1/issues/{issue_ref}/comments",
+      "line": 108,
+      "registration": "registerPluginActionRoutes at pluginBridgePrefix",
+      "implementation_scope": "exclude",
+      "scope_reason": "Internal browser-session relay for sandboxed plugin surfaces; installation identity is carried by host-set header and workspace is derived from installation; not general REST.",
+      "handler": "CreatePluginComment"
+    },
+    {
+      "method": "GET",
+      "path": "/api/plugin-bridge/v1/storage/{scope}",
+      "line": 109,
+      "registration": "registerPluginActionRoutes at pluginBridgePrefix",
+      "implementation_scope": "exclude",
+      "scope_reason": "Internal browser-session relay for sandboxed plugin surfaces; installation identity is carried by host-set header and workspace is derived from installation; not general REST.",
+      "handler": "ListPluginStorage"
+    },
+    {
+      "method": "GET",
+      "path": "/api/plugin-bridge/v1/storage/{scope}/{key}",
+      "line": 110,
+      "registration": "registerPluginActionRoutes at pluginBridgePrefix",
+      "implementation_scope": "exclude",
+      "scope_reason": "Internal browser-session relay for sandboxed plugin surfaces; installation identity is carried by host-set header and workspace is derived from installation; not general REST.",
+      "handler": "GetPluginStorage"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/plugin-bridge/v1/storage/{scope}/{key}",
+      "line": 111,
+      "registration": "registerPluginActionRoutes at pluginBridgePrefix",
+      "implementation_scope": "exclude",
+      "scope_reason": "Internal browser-session relay for sandboxed plugin surfaces; installation identity is carried by host-set header and workspace is derived from installation; not general REST.",
+      "handler": "PutPluginStorage"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/plugin-bridge/v1/storage/{scope}/{key}",
+      "line": 112,
+      "registration": "registerPluginActionRoutes at pluginBridgePrefix",
+      "implementation_scope": "exclude",
+      "scope_reason": "Internal browser-session relay for sandboxed plugin surfaces; installation identity is carried by host-set header and workspace is derived from installation; not general REST.",
+      "handler": "DeletePluginStorage"
+    },
+    {
+      "method": "POST",
+      "path": "/api/plugin-bridge/v1/hooks/{key}",
+      "line": 1635,
+      "registration": "r.Post(\"/hooks/{key}\", h.InvokePluginHook)",
+      "implementation_scope": "exclude",
+      "scope_reason": "Internal browser-session relay for sandboxed plugin surfaces; installation identity is carried by host-set header and workspace is derived from installation; not general REST.",
+      "handler": "InvokePluginHook"
     }
   ],
   "inventory_counts": {
-    "registered_endpoints": 447,
+    "registered_endpoints": 466,
     "included": 319,
-    "excluded": 128
+    "excluded": 147
   },
-  "scope_policy": "Include user-visible REST routes unless explicitly excluded for credentials/auth/session, external callback/webhook, streaming/binary transport, health/diagnostics, or documented internal-only routes. Catalog entries are the sole runtime allowlist."
+  "scope_policy": "Include user-visible REST routes unless explicitly excluded for credentials/auth/session, external callback/webhook, streaming/binary transport, health/diagnostics, or documented internal-only routes. Catalog entries are the sole runtime allowlist.",
+  "dynamic_mounts": [
+    {
+      "mount": "/v1",
+      "source": "router.go:1618-1620",
+      "registration": "registerPluginActionRoutes",
+      "included": 9,
+      "middleware": "PluginBearerOnly"
+    },
+    {
+      "mount": "/api/plugin-bridge/v1",
+      "source": "router.go:1631-1636",
+      "registration": "registerPluginActionRoutes plus POST /hooks/{key}",
+      "excluded": 10,
+      "reason": "Internal browser-session relay; host-set installation identity trust boundary"
+    }
+  ]
 }
