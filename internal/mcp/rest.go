@@ -19,12 +19,12 @@ type restArgs struct {
 	WorkspaceID string            `json:"workspace_id"`
 }
 
-func registerRESTTools(server *mcp.Server, client *multica.Client, readOnly bool, domainSelection string) error {
+func registerRESTTools(server *mcp.Server, client *multica.Client, readOnly bool, domainSelection, profile string) error {
 	endpoints, err := LoadEndpoints()
 	if err != nil {
 		return err
 	}
-	endpoints, err = SelectEndpoints(endpoints, domainSelection)
+	endpoints, err = SelectEndpointsForProfile(endpoints, profile, domainSelection)
 	if err != nil {
 		return err
 	}

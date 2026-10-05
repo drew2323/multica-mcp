@@ -57,7 +57,7 @@ func main() {
 	}
 
 	useCase := app.NewUseCase(client, cfg.ReadOnly)
-	mcpSrv, err := mcpserver.NewServer(useCase, client, cfg.ReadOnly, cfg.RESTDomains)
+	mcpSrv, err := mcpserver.NewServer(useCase, client, cfg.ReadOnly, cfg.RESTDomains, cfg.RESTProfile)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "MCP server setup error: %v\n", err)
 		os.Exit(1)

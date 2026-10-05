@@ -1,16 +1,21 @@
-# REST tool domains
+# REST tool domains and connection profiles
 
-Set `MULTICA_MCP_DOMAINS` per MCP server process/connection. Only selected domains are registered in tools/list. This is static connection-level filtering, not dynamic per-agent loading. Restart the connection and refresh the client tool catalog after configuration changes.
+The reviewed REST catalog contains **319** enabled endpoints. Every endpoint is assigned to one semantic domain. Resource-specific routes override their parent route: issue comments, labels, properties/metadata, attachments, subscriptions, pull-request integrations and quick actions are not classified as generic issues; task-runs, active-task and execution/usage belong to `runs`. Issue timelines remain in `issues`. Workspace runtime profiles, plugins and integrations are separated.
 
-- Unset/empty: workspaces,projects,issues,comments,statuses (114 tools).
-- `projects,comments`: 20 tools.
-- `issues,comments,statuses`: 61 tools; a focused issue-management connection.
-- `all`: 319 tools.
-- Unknown domains and combining `all` with other domains fail startup.
-- Read-only mode further removes mutating tools.
+## Profiles and counts
 
-Available domains and counts (write-enabled source catalog): account 12; agents 25; attachments 4; autopilots 15; billing 10; chat 7; comments 10; integrations 5; issues 46; labels 5; notifications 17; plugins 1; projects 10; properties 4; quick-actions 4; runs 5; runtimes 26; skills 14; squads 10; status 11; statuses 5; tasks 2; views 11; wakeups 17; workspaces 43.
+Counts below are catalog-derived. Profile membership is the union of these named domains, with the core profile additionally keeping only everyday operations.
 
-`status` means activity/dashboard endpoints; `statuses` means configurable issue statuses. Comments and execution runs nested below issue routes have their own domains; child issues and subscribers remain in issues. Domain filtering does not change tool names, REST semantics, credentials or workspace permissions.
+| Profile | Tools | Included domains / scope |
+|---|---:|---|
+| `core` (default) | 28 | everyday `workspaces`, `projects`, `issues`, `comments`; `statuses` GET/HEAD only |
+| `delivery` | 126 | core plus agents, runs, integrations, labels, properties, attachments, project-resources, subscriptions, quick-actions and specialized issue/comment domains |
+| `automation` | 70 | agents, runs, autopilots, quick-actions, wakeups |
+| `admin` | 102 | workspace-admin, integrations, plugins, runtimes, account, billing, statuses |
+| `all` | 319 | all included catalog endpoints; preserves raw method/path/body/query/workspace override behavior |
 
-Verification: race-enabled tests and build passed; actual stdio tools/list from a neutral working directory returned 114 (default), 20 (projects,comments), and 319 (all). No production deployment performed.
+`core` excludes status mutation, subscriptions, workspace administration, automation/runs, bulk and analytics operations, project resources, and advanced comments.
+
+## Configuration precedence
+
+`MULTICA_MCP_PROFILE` selects `core` when unset, or one of `core`, `delivery`, `automation`, `admin`, `all`. `MULTICA_MCP_DOMAINS` is a comma-separated domain allowlist; if non-empty it **overrides** profile membership. The special value `all` cannot be combined with other values. Unknown profiles/domains, empty domain elements, and any included catalog endpoint without a semantic domain cause startup selection to fail. `MULTICA_READ_ONLY=true` is applied after selection and removes all but GET/HEAD endpoints.

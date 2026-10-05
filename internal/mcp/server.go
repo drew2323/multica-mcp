@@ -20,7 +20,7 @@ type Server struct {
 	useCase   *app.UseCase
 }
 
-func NewServer(useCase *app.UseCase, client *multica.Client, readOnly bool, domainSelection string) (*Server, error) {
+func NewServer(useCase *app.UseCase, client *multica.Client, readOnly bool, domainSelection, profile string) (*Server, error) {
 	s := &Server{useCase: useCase, mcpServer: mcp.NewServer(&mcp.Implementation{Name: "multica-mcp", Version: version.Version}, nil)}
 	endpoints, err := LoadEndpoints()
 	if err != nil {
@@ -29,7 +29,7 @@ func NewServer(useCase *app.UseCase, client *multica.Client, readOnly bool, doma
 	if err = ValidateEndpoints(endpoints); err != nil {
 		return nil, err
 	}
-	if err = registerRESTTools(s.mcpServer, client, readOnly, domainSelection); err != nil {
+	if err = registerRESTTools(s.mcpServer, client, readOnly, domainSelection, profile); err != nil {
 		return nil, err
 	}
 	return s, nil

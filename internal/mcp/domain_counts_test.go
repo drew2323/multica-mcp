@@ -22,6 +22,13 @@ func TestDomainCounts(t *testing.T) {
 	for _, k := range keys {
 		t.Logf("%s: %d", k, counts[k])
 	}
+	for _, profile := range []string{"core", "delivery", "automation", "admin", "all"} {
+		selected, e := SelectEndpointsForProfile(all, profile, "")
+		if e != nil {
+			t.Fatal(e)
+		}
+		t.Logf("profile %s: %d", profile, len(selected))
+	}
 	core, err := SelectEndpoints(all, "")
 	if err != nil {
 		t.Fatal(err)

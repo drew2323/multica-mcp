@@ -8,9 +8,9 @@ import (
 
 func TestEndpointDomainClassification(t *testing.T) {
 	cases := []struct{ path, want string }{
-		{"/api/issues/{id}/comments", "comments"}, {"/api/issues/{id}/subscribers", "issues"},
+		{"/api/issues/{id}/comments", "comments"}, {"/api/issues/{id}/task-runs", "runs"}, {"/api/issues/{id}/timeline", "issues"}, {"/api/issues/{id}/labels", "labels"}, {"/api/workspaces/{id}/members", "workspace-admin"}, {"/api/issues/{id}/subscribers", "subscriptions"},
 		{"/api/comments/{commentId}/resolve", "comments"}, {"/api/autopilots/{id}/runs", "runs"},
-		{"/api/autopilots/{id}", "autopilots"}, {"/api/issue-statuses", "statuses"},
+		{"/api/autopilots/{id}", "autopilots"}, {"/api/issue-statuses", "workspace-admin"},
 		{"/api/issue-views/{id}", "views"}, {"/api/workspaces/{id}/plugins", "plugins"},
 	}
 	for _, tc := range cases {
@@ -66,6 +66,29 @@ func TestSelectRESTEndpoints(t *testing.T) {
 	}
 }
 
+func TestCoreProfileIsBoundedAndSemantic(t *testing.T) {
+	all, err := LoadEndpoints()
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, err := SelectEndpointsForProfile(all, "core", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(got) < 20 || len(got) > 30 {
+		t.Fatalf("core tools=%d, want 20..30", len(got))
+	}
+	for _, e := range got {
+		d := endpointDomain(e)
+		if d == "runs" || d == "subscriptions" || d == "workspace-admin" || d == "automation" {
+			t.Errorf("unexpected core route %s %s (%s)", e.Method, e.Path, d)
+		}
+		if strings.Contains(e.Path, "task-runs") && d != "issues" {
+			t.Errorf("timeline domain=%s", d)
+		}
+	}
+}
+
 func TestDomainSelectionAppliedBeforeReadOnlyFilter(t *testing.T) {
 	all, err := LoadEndpoints()
 	if err != nil {
@@ -101,5 +124,33 @@ func TestDomainSelectionTrimsAndNormalizes(t *testing.T) {
 		if !strings.Contains(" projects comments ", " "+endpointDomain(e)+" ") {
 			t.Fatalf("unexpected domain %q", endpointDomain(e))
 		}
+	}
+}
+
+func TestProfilesAndExplicitDomainOverride(t *testing.T) {
+	all, err := LoadEndpoints()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, p := range []string{"core", "delivery", "automation", "admin", "all"} {
+		got, e := SelectEndpointsForProfile(all, p, "")
+		if e != nil {
+			t.Fatalf("%s: %v", p, e)
+		}
+		if p == "all" && len(got) != len(all) {
+			t.Fatalf("all=%d", len(got))
+		}
+	}
+	got, e := SelectEndpointsForProfile(all, "admin", "issues")
+	if e != nil || len(got) == 0 {
+		t.Fatalf("explicit override: %d %v", len(got), e)
+	}
+	for _, x := range got {
+		if endpointDomain(x) != "issues" {
+			t.Fatal(endpointDomain(x))
+		}
+	}
+	if _, e = SelectEndpointsForProfile(all, "bad", ""); e == nil {
+		t.Fatal("expected invalid profile error")
 	}
 }
