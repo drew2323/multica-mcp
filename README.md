@@ -8,14 +8,14 @@ Use **`rest-api-wrapper`**, tracked by [PR #1](https://github.com/drew2323/multi
 
 ## Behavior
 
-- One catalog tool per REST method/path; arbitrary JSON body/query, repeated query values and request-local workspace override.
+- One catalog tool per REST method/path; arbitrary JSON body/query, repeated query values and request-local workspace override. Two explicit attachment transport tools provide bounded content read and multipart upload.
 - Custom statuses are backend-authoritative: no hardcoded enum.
 - No CLI calls, planning, fallback orchestration or composite workflows in registered tools.
 - Embedded catalog, independent of working directory.
 - Read-only mode removes mutating tools.
 - 319 included endpoints; explicit exclusions for plugin authentication, internal callbacks, secrets and unsuitable transports. Not 100% API coverage.
 
-See [endpoint catalog](docs/rest-api-catalog.json), [coverage limitations](docs/rest-api-coverage.md) and [domains/profiles](docs/tool-domains.md). Some input descriptions remain incomplete; raw JSON passthrough is not a complete schema.
+See [endpoint catalog](docs/rest-api-catalog.json), [coverage limitations](docs/rest-api-coverage.md), [attachment content tools](docs/attachment-content-tools.md) and [domains/profiles](docs/tool-domains.md). Some input descriptions remain incomplete; raw JSON passthrough is not a complete schema.
 
 ## Build
 
@@ -41,7 +41,7 @@ Read at process startup. Protect credentials outside Git and service unit text.
 - `MCP_TRANSPORT`: stdio (default), or legacy http.
 - `LOG_LEVEL`: info (default).
 
-Write-enabled profiles: **core 43 / delivery 126 / automation 70 / admin 102 / all 319**. Exact membership in [tool-domains.md](docs/tool-domains.md). Core includes issue search/children/timeline and status discovery, includes subscriber read and excludes status administration. Profiles filter discovery, not credential authorization. Read-only mode and workspace permissions are separate.
+Write-enabled profiles: **core 45 / delivery 128 / automation 70 / admin 102 / all 321**. Exact membership in [tool-domains.md](docs/tool-domains.md). Core includes issue search/children/timeline and status discovery, includes subscriber read and excludes status administration. Profiles filter discovery, not credential authorization. Read-only mode and workspace permissions are separate.
 
 For local stdio clients, configure your server command's environment, e.g. `MULTICA_MCP_PROFILE=core`. Use an absolute binary path and your client's protected credential mechanism. MCP arguments are `path_params`, `query`, `body` and optional `workspace_id`; obtain exact names and schemas via `tools/list`, not legacy task-tool examples.
 
@@ -70,7 +70,7 @@ Verified:
 - Disposable unassigned issue create/read and `ingested → todo → ingested` transitions.
 - Children/comments/subscribers/task-run reads; threaded comment create/update/delete.
 - Cleanup independently confirmed by HTTP 404.
-- Installed binary matches candidate; deployed launcher tools/list 28 and custom status discovery passed. Service active/enabled; tunnel readiness healthy.
+- Installed binary matches candidate; historical deployed launcher tools/list 28 and custom status discovery passed. Service active/enabled; tunnel readiness healthy.
 
 Not verified: every endpoint live, agent assignment/autopilot trigger (avoided starting work), reboot via actual reboot, post-upgrade end-to-end ChatGPT call. Tool names changed: refresh is required. Legacy source files remain but workflow tools are not registered.
 
@@ -80,4 +80,4 @@ See [LICENSE](LICENSE); upstream attribution retained.
 
 ## Core auxiliary primitives
 
-Core adds label definition reads and issue label add/remove; property definition reads and issue metadata/property value operations; subscriber list; attachment list and metadata read. Issue property values are available in issue detail. No label/property schema mutations or attachment deletion. Subscribe/unsubscribe are NOT included: REST accepts a different target user, and a thin passthrough cannot promise self-only restrictions. No file upload/add-reference or binary content read is implemented: the catalog exposes no compatible JSON add route, and multipart/binary needs separate transport support.
+Core adds label definition reads and issue label add/remove; property definition reads and issue metadata/property value operations; subscriber list; attachment list and metadata read. Issue property values are available in issue detail. Explicit attachment tools now read server-approved text-previewable content (2 MiB server bound; non-UTF-8 is base64) and upload multipart files for issue/comment references (8 MiB wrapper bound). No label/property schema mutations or attachment deletion. Subscribe/unsubscribe are NOT included: REST accepts a different target user, and a thin passthrough cannot promise self-only restrictions.

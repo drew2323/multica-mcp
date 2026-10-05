@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -102,6 +103,102 @@ func (c *Client) REST(ctx context.Context, method, path string, query map[string
 		return nil, fmt.Errorf("decode REST response: invalid JSON")
 	}
 	return json.RawMessage(data), nil
+}
+
+// AttachmentContent fetches authenticated text-previewable bytes from the real API route.
+func (c *Client) AttachmentContent(ctx context.Context, id, workspaceID string) ([]byte, string, error) {
+	u, err := url.Parse(c.baseURL + "/api/attachments/" + url.PathEscape(id) + "/content")
+	if err != nil {
+		return nil, "", err
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
+	if err != nil {
+		return nil, "", err
+	}
+	c.attachmentHeaders(req, workspaceID)
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, "", err
+	}
+	defer resp.Body.Close()
+	data, err := io.ReadAll(io.LimitReader(resp.Body, (2<<20)+1))
+	if err != nil {
+		return nil, "", err
+	}
+	if resp.StatusCode >= 400 {
+		return nil, "", &apiError{StatusCode: resp.StatusCode, Message: parseAPIErrorMessage(data)}
+	}
+	if len(data) > 2<<20 {
+		return nil, "", fmt.Errorf("attachment content exceeds 2 MiB")
+	}
+	return data, resp.Header.Get("X-Original-Content-Type"), nil
+}
+
+// UploadAttachment uses the server's /api/upload-file multipart fields.
+func (c *Client) UploadAttachment(ctx context.Context, filename, contentType string, data []byte, issueID, commentID, workspaceID string) (json.RawMessage, error) {
+	var buf bytes.Buffer
+	form := multipart.NewWriter(&buf)
+	part, err := form.CreateFormFile("file", filename)
+	if err != nil {
+		return nil, err
+	}
+	if _, err = part.Write(data); err != nil {
+		return nil, err
+	}
+	if issueID != "" {
+		if err = form.WriteField("issue_id", issueID); err != nil {
+			return nil, err
+		}
+	}
+	if commentID != "" {
+		if err = form.WriteField("comment_id", commentID); err != nil {
+			return nil, err
+		}
+	}
+	if err = form.Close(); err != nil {
+		return nil, err
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.baseURL+"/api/upload-file", &buf)
+	if err != nil {
+		return nil, err
+	}
+	c.attachmentHeaders(req, workspaceID)
+	req.Header.Set("Content-Type", form.FormDataContentType())
+	req.Header.Set("Accept", "application/json")
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	out, err := io.ReadAll(io.LimitReader(resp.Body, (1<<20)+1))
+	if err != nil {
+		return nil, err
+	}
+	if len(out) > 1<<20 {
+		return nil, fmt.Errorf("upload response exceeds 1 MiB")
+	}
+	if resp.StatusCode >= 400 {
+		return nil, &apiError{StatusCode: resp.StatusCode, Message: parseAPIErrorMessage(out)}
+	}
+	if !json.Valid(out) {
+		return nil, fmt.Errorf("decode upload response: invalid JSON")
+	}
+	return json.RawMessage(out), nil
+}
+
+func (c *Client) attachmentHeaders(req *http.Request, workspaceID string) {
+	req.Header.Set("Authorization", "Bearer "+c.token)
+	req.Header.Set("X-Client-Platform", "mcp")
+	if c.clientVersion != "" {
+		req.Header.Set("X-Client-Version", c.clientVersion)
+	}
+	if workspaceID != "" {
+		req.Header.Set("X-Workspace-ID", workspaceID)
+	} else if c.workspaceSlug != "" {
+		req.Header.Set("X-Workspace-Slug", c.workspaceSlug)
+	} else if c.workspaceID != "" {
+		req.Header.Set("X-Workspace-ID", c.workspaceID)
+	}
 }
 
 func (c *Client) workspaceAttrs() []any {
