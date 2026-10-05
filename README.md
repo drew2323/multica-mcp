@@ -1,6 +1,6 @@
 # Multica REST MCP
 
-A thin REST-only MCP server maintained in [drew2323/multica-mcp](https://github.com/drew2323/multica-mcp), derived from [strider2038/multica-mcp](https://github.com/strider2038/multica-mcp). Original license and attribution retained. The Go module path still uses the upstream namespace; this is not an upstream release.
+A broad Multica REST API adapter for MCP clients, with selectable connection profiles—not a server limited to 45 tools. Maintained in [drew2323/multica-mcp](https://github.com/drew2323/multica-mcp), derived from [strider2038/multica-mcp](https://github.com/strider2038/multica-mcp). Original license and attribution retained. The Go module path still uses the upstream namespace; this is not an upstream release.
 
 ## Project status
 
@@ -16,6 +16,43 @@ The default `main` branch contains this REST-only implementation, used in our pr
 - 319 included endpoints; explicit exclusions for plugin authentication, internal callbacks, secrets and unsuitable transports. Not 100% API coverage.
 
 See [endpoint catalog](docs/rest-api-catalog.json), [coverage limitations](docs/rest-api-coverage.md), [attachment content tools](docs/attachment-content-tools.md) and [domains/profiles](docs/tool-domains.md). Some input descriptions remain incomplete; raw JSON passthrough is not a complete schema.
+
+## REST API scope and launch profiles
+
+The server exposes the supported Multica REST API surface directly, rather than a small collection of predefined workflows. **`all` exposes 321 tools: 319 catalog-driven REST operations plus attachment content read and multipart upload.** The **45-tool `core` is only the default discovery profile**, not the extent of the server's capabilities.
+
+Each supported REST method/path maps to a tool. Profiles determine which tools a particular server process advertises:
+
+- **`core` — 45:** routine projects/issues/comments, status reads, label assignment, property values, subscriber reads, attachment metadata/content/upload.
+- **`delivery` — 128:** expanded delivery work including agents, execution history, integrations, resource operations and broader issue/comment capabilities.
+- **`automation` — 70:** agents, runs, autopilots, quick actions and wakeups.
+- **`admin` — 102:** workspace configuration, integrations, plugins, runtimes, account, billing and status administration.
+- **`all` — 321:** every included REST operation plus both attachment transport tools.
+
+Counts are for write-enabled configuration. Profiles overlap: they are not disjoint partitions. The API inventory covers 466 route registrations, with 147 documented exclusions (plugin-specific authentication, internal callbacks, credentials/secrets and unsupported transports). Thus this is **broad REST API coverage with explicit exceptions**, not a claim that every route is supported or tested. See [coverage](docs/rest-api-coverage.md).
+
+### Launch with a profile
+
+Provide `MULTICA_BASE_URL`, `MULTICA_TOKEN` and workspace selection via a protected environment/launcher, then select the profile at startup:
+
+```bash
+# Broad API access
+MULTICA_MCP_PROFILE=all MCP_TRANSPORT=stdio ./bin/multica-mcp
+
+# Routine work, delivery, automation or administration
+MULTICA_MCP_PROFILE=core ./bin/multica-mcp
+MULTICA_MCP_PROFILE=delivery ./bin/multica-mcp
+MULTICA_MCP_PROFILE=automation ./bin/multica-mcp
+MULTICA_MCP_PROFILE=admin ./bin/multica-mcp
+
+# Custom domain selection overrides the named profile
+MULTICA_MCP_DOMAINS=issues,comments,attachments ./bin/multica-mcp
+
+# Broad discovery without writes (including no upload)
+MULTICA_MCP_PROFILE=all MULTICA_READ_ONLY=true ./bin/multica-mcp
+```
+
+Leave `MULTICA_MCP_DOMAINS` unset/empty when using a named profile. A local MCP client sets these variables in its server process environment; a remote/tunneled client uses the host's launcher configuration. Each connection advertises one static selection: changing it requires restarting that process and refreshing the client's tool catalog. For simultaneous roles configure separate connections. Profiles restrict discovery, not backend permissions; REST authorization still applies.
 
 ## What it provides today
 

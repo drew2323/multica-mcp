@@ -8,13 +8,13 @@ Counts below are catalog-derived. Profile membership is the union of these named
 
 | Profile | Tools | Included domains / scope |
 |---|---:|---|
-| `core` (default) | 45 | everyday `workspaces`, `projects`, `issues`, `comments`; `statuses` GET/HEAD only |
+| `core` (default) | 45 | everyday `workspaces`, `projects`, `issues`, `comments`; `statuses` GET/HEAD only, narrow label/property operations, subscriber reads and attachment tools |
 | `delivery` | 128 | core plus agents, runs, integrations, labels, properties, attachments, project-resources, subscriptions, quick-actions and specialized issue/comment domains |
 | `automation` | 70 | agents, runs, autopilots, quick-actions, wakeups |
 | `admin` | 102 | workspace-admin, integrations, plugins, runtimes, account, billing, statuses |
 | `all` | 321 | all included catalog endpoints; preserves raw method/path/body/query/workspace override behavior |
 
-`core` excludes status mutation, subscriptions, workspace administration, automation/runs, bulk and analytics operations, project resources, and advanced comments.
+`core` excludes status mutation, subscription mutations, workspace administration, automation/runs, bulk and analytics operations, project resources, and advanced comments.
 
 ## Configuration precedence
 
