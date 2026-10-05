@@ -41,7 +41,7 @@ Read at process startup. Protect credentials outside Git and service unit text.
 - `MCP_TRANSPORT`: stdio (default), or legacy http.
 - `LOG_LEVEL`: info (default).
 
-Write-enabled profiles: **core 28 / delivery 126 / automation 70 / admin 102 / all 319**. Exact membership in [tool-domains.md](docs/tool-domains.md). Core includes issue search/children/timeline and status discovery, excludes subscriptions and status administration. Profiles filter discovery, not credential authorization. Read-only mode and workspace permissions are separate.
+Write-enabled profiles: **core 43 / delivery 126 / automation 70 / admin 102 / all 319**. Exact membership in [tool-domains.md](docs/tool-domains.md). Core includes issue search/children/timeline and status discovery, includes subscriber read and excludes status administration. Profiles filter discovery, not credential authorization. Read-only mode and workspace permissions are separate.
 
 For local stdio clients, configure your server command's environment, e.g. `MULTICA_MCP_PROFILE=core`. Use an absolute binary path and your client's protected credential mechanism. MCP arguments are `path_params`, `query`, `body` and optional `workspace_id`; obtain exact names and schemas via `tools/list`, not legacy task-tool examples.
 
@@ -77,3 +77,7 @@ Not verified: every endpoint live, agent assignment/autopilot trigger (avoided s
 ## License
 
 See [LICENSE](LICENSE); upstream attribution retained.
+
+## Core auxiliary primitives
+
+Core adds label definition reads and issue label add/remove; property definition reads and issue metadata/property value operations; subscriber list; attachment list and metadata read. Issue property values are available in issue detail. No label/property schema mutations or attachment deletion. Subscribe/unsubscribe are NOT included: REST accepts a different target user, and a thin passthrough cannot promise self-only restrictions. No file upload/add-reference or binary content read is implemented: the catalog exposes no compatible JSON add route, and multipart/binary needs separate transport support.

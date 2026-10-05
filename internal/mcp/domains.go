@@ -6,7 +6,7 @@ import (
 )
 
 var profiles = map[string][]string{
-	"core":       {"workspaces", "projects", "issues", "comments", "statuses"},
+	"core":       {"workspaces", "projects", "issues", "comments", "statuses", "labels", "properties", "attachments", "subscriptions"},
 	"delivery":   {"workspaces", "projects", "issues", "comments", "comments-advanced", "issues-bulk", "issues-analytics", "issues-advanced", "statuses", "agents", "runs", "integrations", "labels", "properties", "attachments", "project-resources", "subscriptions", "quick-actions"},
 	"automation": {"agents", "runs", "autopilots", "quick-actions", "wakeups"},
 	"admin":      {"workspace-admin", "integrations", "plugins", "runtimes", "account", "billing", "statuses"},
@@ -243,6 +243,26 @@ func SelectEndpointsForProfile(all []Endpoint, profile, selection string) ([]End
 func coreEndpoint(e Endpoint) bool {
 	p := e.Path
 	d := endpointDomain(e)
+	// These are the narrow, user-facing primitives allowed into core beyond
+	// issue CRUD. Match exact method and route so schema/admin mutations and
+	// unrelated attachment operations never leak in by path substring.
+	if d == "labels" || d == "properties" || d == "attachments" || d == "subscriptions" {
+		key := e.Method + " " + p
+		for _, allowed := range []string{
+			"GET /api/labels", "GET /api/labels/{id}",
+			"GET /api/properties", "GET /api/properties/{id}",
+			"GET /api/issues/{id}/labels", "POST /api/issues/{id}/labels", "DELETE /api/issues/{id}/labels/{labelId}",
+			"GET /api/issues/{id}/metadata", "PUT /api/issues/{id}/metadata/{key}", "DELETE /api/issues/{id}/metadata/{key}",
+			"PUT /api/issues/{id}/properties/{propertyId}", "DELETE /api/issues/{id}/properties/{propertyId}",
+			"GET /api/issues/{id}/subscribers",
+			"GET /api/issues/{id}/attachments", "GET /api/attachments/{id}",
+		} {
+			if key == allowed {
+				return true
+			}
+		}
+		return false
+	}
 	if d == "workspaces" {
 		return e.Path == "/api/workspaces" || e.Path == "/api/workspaces/{id}" || e.Path == "/api/workspaces/{id}/members"
 	}
