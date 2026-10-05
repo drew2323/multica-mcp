@@ -4,7 +4,7 @@
 
 Source inventory: deployed Multica server commit `d021e1bde60000399e02a3bc9144aa3499766538`, router source `server/cmd/server/router.go`. Inventory is 447 statically registered route declarations; this is **not** a count of all runtime routes because dynamic mounts are not expanded. `internal/mcp/rest-api-catalog.json` is the canonical embedded catalog; `docs/rest-api-catalog.json` is the generated documentation mirror. `implementation_scope` is the runtime allowlist. Runtime tool names derive from method+path and a short route hash.
 
-Current static inventory: **365 included, 82 excluded, 447 registered declarations**. The runtime count is the effective `LoadEndpoints()` set after explicit catalog scope and route validation, not a claim that all API capabilities are represented. Dynamic mounts are outside these totals.
+Current static inventory: **319 included, 128 excluded, 447 registered declarations**. The runtime count is the effective `LoadEndpoints()` set after explicit catalog scope and route validation, not a claim that all API capabilities are represented. Dynamic mounts are outside these totals.
 
 ## Inclusion policy
 
