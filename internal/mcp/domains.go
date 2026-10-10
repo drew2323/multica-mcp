@@ -249,7 +249,7 @@ func coreEndpoint(e Endpoint) bool {
 	if d == "labels" || d == "properties" || d == "attachments" || d == "subscriptions" {
 		key := e.Method + " " + p
 		for _, allowed := range []string{
-			"GET /api/labels", "GET /api/labels/{id}",
+			"GET /api/labels", "GET /api/labels/{id}", "POST /api/labels",
 			"GET /api/properties", "GET /api/properties/{id}",
 			"GET /api/issues/{id}/labels", "POST /api/issues/{id}/labels", "DELETE /api/issues/{id}/labels/{labelId}",
 			"GET /api/issues/{id}/metadata", "PUT /api/issues/{id}/metadata/{key}", "DELETE /api/issues/{id}/metadata/{key}",

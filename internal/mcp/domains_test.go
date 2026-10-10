@@ -100,7 +100,7 @@ func TestCoreProfileIncludesOnlyApprovedAuxiliaryOperations(t *testing.T) {
 		included[e.Method+" "+e.Path] = true
 	}
 	want := []string{
-		"GET /api/labels", "GET /api/labels/{id}",
+		"GET /api/labels", "GET /api/labels/{id}", "POST /api/labels",
 		"GET /api/issues/{id}/labels", "POST /api/issues/{id}/labels", "DELETE /api/issues/{id}/labels/{labelId}",
 		"GET /api/properties", "GET /api/properties/{id}",
 		"GET /api/issues/{id}/metadata", "PUT /api/issues/{id}/metadata/{key}", "DELETE /api/issues/{id}/metadata/{key}",
@@ -115,7 +115,7 @@ func TestCoreProfileIncludesOnlyApprovedAuxiliaryOperations(t *testing.T) {
 	}
 	for _, e := range got {
 		key := e.Method + " " + e.Path
-		for _, forbidden := range []string{"POST /api/labels", "PUT /api/labels/{id}", "DELETE /api/labels/{id}", "POST /api/properties", "PATCH /api/properties/{id}", "DELETE /api/properties/{id}", "DELETE /api/attachments/{id}", "GET /api/attachments/{id}/content", "GET /api/attachments/{id}/download", "POST /api/issues/{id}/unsubscribe/subtree"} {
+		for _, forbidden := range []string{"PUT /api/labels/{id}", "DELETE /api/labels/{id}", "POST /api/properties", "PATCH /api/properties/{id}", "DELETE /api/properties/{id}", "DELETE /api/attachments/{id}", "GET /api/attachments/{id}/content", "GET /api/attachments/{id}/download", "POST /api/issues/{id}/unsubscribe/subtree"} {
 			if key == forbidden {
 				t.Errorf("forbidden core route included: %s", key)
 			}

@@ -8,6 +8,12 @@ with major version `0` while the project is in active development.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-10
+
+### Added
+
+- `core` profile now includes label creation (`POST /api/labels`); label update/delete stay out of core. Core is 46 tools.
+
 ## [0.2.0] - 2026-06-29
 
 ### Added

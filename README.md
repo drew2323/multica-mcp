@@ -1,6 +1,6 @@
 # Multica REST MCP
 
-A broad Multica REST API adapter for MCP clients, with selectable connection profiles—not a server limited to 45 tools. Maintained in [drew2323/multica-mcp](https://github.com/drew2323/multica-mcp), derived from [strider2038/multica-mcp](https://github.com/strider2038/multica-mcp). Original license and attribution retained. The Go module path still uses the upstream namespace; this is not an upstream release.
+A broad Multica REST API adapter for MCP clients, with selectable connection profiles—not a server limited to 46 tools. Maintained in [drew2323/multica-mcp](https://github.com/drew2323/multica-mcp), derived from [strider2038/multica-mcp](https://github.com/strider2038/multica-mcp). Original license and attribution retained. The Go module path still uses the upstream namespace; this is not an upstream release.
 
 ## Project status
 
@@ -19,11 +19,11 @@ See [endpoint catalog](docs/rest-api-catalog.json), [coverage limitations](docs/
 
 ## REST API scope and launch profiles
 
-The server exposes the supported Multica REST API surface directly, rather than a small collection of predefined workflows. **`all` exposes 321 tools: 319 catalog-driven REST operations plus attachment content read and multipart upload.** The **45-tool `core` is only the default discovery profile**, not the extent of the server's capabilities.
+The server exposes the supported Multica REST API surface directly, rather than a small collection of predefined workflows. **`all` exposes 321 tools: 319 catalog-driven REST operations plus attachment content read and multipart upload.** The **46-tool `core` is only the default discovery profile**, not the extent of the server's capabilities.
 
 Each supported REST method/path maps to a tool. Profiles determine which tools a particular server process advertises:
 
-- **`core` — 45:** routine projects/issues/comments, status reads, label assignment, property values, subscriber reads, attachment metadata/content/upload.
+- **`core` — 46:** routine projects/issues/comments, status reads, label creation and assignment, property values, subscriber reads, attachment metadata/content/upload.
 - **`delivery` — 128:** expanded delivery work including agents, execution history, integrations, resource operations and broader issue/comment capabilities.
 - **`automation` — 70:** agents, runs, autopilots, quick actions and wakeups.
 - **`admin` — 102:** workspace configuration, integrations, plugins, runtimes, account, billing and status administration.
@@ -60,7 +60,7 @@ Leave `MULTICA_MCP_DOMAINS` unset/empty when using a named profile. A local MCP 
 - **Projects:** search, list, detail and CRUD; project resources in specialized profiles.
 - **Issues:** search/list/detail/create/update/delete, assignment and arbitrary custom statuses through native update fields, hierarchy/children and general issue timeline.
 - **Comments:** threaded create/read/update/delete and resolve operations.
-- **Labels:** read available definitions and issue labels; add/remove issue labels in core. Definition mutations are not in core.
+- **Labels:** read available definitions and issue labels; create label definitions (`POST /api/labels`) and add/remove issue labels in core. Label update/delete and other definition mutations are not in core.
 - **Properties:** read typed definitions and issue values, set/clear issue values and metadata. Definition mutations are not in core.
 - **Followers:** list subscribers in core. Subscribe/unsubscribe are specialized because native REST also permits targeting other users.
 - **Attachments:** list/detail, read text-previewable content, upload files to issues/comments. Markdown supplementary requirements can be read and written directly. No attachment deletion in core, no image interpretation or PDF text extraction.
@@ -107,7 +107,7 @@ Read at process startup. Protect credentials outside Git and service unit text.
 - `MCP_TRANSPORT`: stdio (default), or legacy http.
 - `LOG_LEVEL`: info (default).
 
-Write-enabled profiles: **core 45 / delivery 128 / automation 70 / admin 102 / all 321**. Exact membership in [tool-domains.md](docs/tool-domains.md). Core includes issue search/children/timeline and status discovery, includes subscriber read and excludes status administration. Profiles filter discovery, not credential authorization. Read-only mode and workspace permissions are separate.
+Write-enabled profiles: **core 46 / delivery 128 / automation 70 / admin 102 / all 321**. Exact membership in [tool-domains.md](docs/tool-domains.md). Core includes issue search/children/timeline and status discovery, includes subscriber read and excludes status administration. Profiles filter discovery, not credential authorization. Read-only mode and workspace permissions are separate.
 
 For local stdio clients, configure your server command's environment, e.g. `MULTICA_MCP_PROFILE=core`. Use an absolute binary path and your client's protected credential mechanism. MCP arguments are `path_params`, `query`, `body` and optional `workspace_id`; obtain exact names and schemas via `tools/list`, not legacy task-tool examples.
 
