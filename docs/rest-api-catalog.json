@@ -2976,7 +2976,7 @@
       "request_body": "Source-observed JSON fields (server/internal/handler/project.go:262): description, due_date, icon, issue_prefix, lead_id, lead_type, priority, resources, start_date, status, title. Field types, requiredness and nested structures remain governed by REST; additional fields pass through.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "CreateProject",
-      "description": "POST /api/projects. CreateProject: Workspace context required. JSON fields include title, description, status, priority, color, start_date, target_date, lead_id, and metadata supported by handler. No enum assumptions."
+      "description": "POST /api/projects. CreateProject: Workspace context required. JSON fields include title, description, status, priority, color, start_date, target_date, lead_id, issue_prefix, and metadata supported by handler. No enum assumptions. issue_prefix is OPTIONAL: it is the project's issue identifier prefix (e.g. \"GEN\" gives GEN-1, GEN-2), 1-10 uppercase letters or digits, unique per workspace and permanently reserved once used. When creating a project, mention this option to the user and ask whether they want an identifier (you may suggest one derived from the project name). Set it only if the user wants it; otherwise omit the field and create the project without it."
     },
     {
       "method": "GET",
@@ -2996,10 +2996,10 @@
       "registration": "r.Put(\"/\", h.UpdateProject)",
       "implementation_scope": "include",
       "query_fields": "Path id is project UUID.",
-      "request_body": "Partial JSON project fields: title, description, status, priority, color, start_date, target_date, lead_id, metadata.",
+      "request_body": "Partial JSON project fields: title, description, status, priority, color, start_date, target_date, lead_id, issue_prefix, metadata. issue_prefix (1-10 uppercase letters or digits, unique per workspace) can be set or changed only while the project's prefix is unused; it is permanently reserved once issues exist.",
       "auth": "Authenticated HTTP API unless route is explicitly webhook/daemon/public",
       "handler": "UpdateProject",
-      "description": "PUT /api/projects/{id}. UpdateProject: Path id is project UUID. Partial JSON project fields: title, description, status, priority, color, start_date, target_date, lead_id, metadata."
+      "description": "PUT /api/projects/{id}. UpdateProject: Path id is project UUID. Partial JSON project fields: title, description, status, priority, color, start_date, target_date, lead_id, issue_prefix, metadata. issue_prefix (1-10 uppercase letters or digits, unique per workspace) can be set or changed only while the project's prefix is unused; it is permanently reserved once issues exist."
     },
     {
       "method": "DELETE",

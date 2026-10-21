@@ -8,6 +8,12 @@ with major version `0` while the project is in active development.
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-21
+
+### Changed
+
+- REST tool descriptions for project create/update now tell clients (ChatGPT) about the optional `issue_prefix` (project issue identifier, 1-10 uppercase letters/digits) and to ask the user whether they want one when creating a project.
+
 ## [0.2.0] - 2026-06-29
 
 ### Added
